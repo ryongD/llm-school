@@ -64,6 +64,14 @@ mikolov2013:
   url: "https://arxiv.org/abs/1301.3781"
   grade: S1
 
+edman2024:
+  type: paper
+  title: "CUTE: Measuring LLMs' Understanding of Their Tokens"
+  authors: "Edman, Schmid & Fraser"
+  year: 2024 # EMNLP 2024 — 토큰화 모델의 문자 수준 과제 한계 벤치마크 (1-1 훅 재설계 근거)
+  url: "https://arxiv.org/abs/2409.15452"
+  grade: S1
+
 jurafsky-slp3:
   type: docs
   title: "Speech and Language Processing (3rd ed. draft)"
