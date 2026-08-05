@@ -30,6 +30,7 @@ import { widgetIds } from "../src/widgets/widget-ids";
 const ROOT = process.cwd();
 const CURRICULUM_DIR = path.join(ROOT, "content", "curriculum");
 const GLOSSARY_DIR = path.join(ROOT, "content", "glossary");
+const PAGES_DIR = path.join(ROOT, "content", "pages");
 const FACTS_DIR = path.join(ROOT, "data", "facts");
 
 const FACTS_STALE_DAYS = 90;
@@ -179,6 +180,27 @@ for (const g of glossaryEntries) {
   }
   for (const id of (g.data.relatedChapters as string[]) ?? []) {
     checkChapterRef(g.file, "related-chapter", id, "relatedChapters");
+  }
+}
+
+// ---------- 단일 페이지 검사 (일러두기 등 — §7.5: references 규칙 예외) ----------
+
+for (const pg of loadEntries(PAGES_DIR)) {
+  if (pg.raw.includes("TODO-VERIFY")) {
+    report(
+      pg.data.status === "published" ? "error" : "warn",
+      pg.file,
+      "todo-verify",
+      `TODO-VERIFY 마커가 남아 있습니다 (status: ${pg.data.status}).`,
+    );
+  }
+  for (const m of stripCode(pg.content).matchAll(TERM_TAG)) {
+    const term = glossaryBySlug.get(m[1]);
+    if (!term) {
+      report("error", pg.file, "term-missing", `용어 '${m[1]}' 가 용어사전에 없습니다.`);
+    } else if (term.data.status === "draft") {
+      report("warn", pg.file, "term-draft", `용어 '${m[1]}' 는 아직 draft 입니다.`);
+    }
   }
 }
 

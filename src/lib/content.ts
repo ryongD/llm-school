@@ -1,5 +1,5 @@
-import { chapters, glossary } from "#velite";
-import type { Chapter, GlossaryTerm } from "#velite";
+import { chapters, glossary, sitePages } from "#velite";
+import type { Chapter, GlossaryTerm, SitePage } from "#velite";
 
 /**
  * 콘텐츠 조회 헬퍼.
@@ -45,4 +45,12 @@ export function visibleGlossary(): GlossaryTerm[] {
 /** 미등재·미공개 용어는 undefined → <Term>이 평문으로 렌더한다(§4.7). */
 export function findGlossaryTerm(slug: string): GlossaryTerm | undefined {
   return visibleGlossary().find((g) => g.slug === slug);
+}
+
+/** 단일 페이지(일러두기 등) — 노출 규칙은 챕터와 동일 */
+export function findSitePage(slug: string): SitePage | undefined {
+  const list = isProduction
+    ? sitePages.filter((p) => p.status === "published")
+    : sitePages;
+  return list.find((p) => p.slug === slug);
 }

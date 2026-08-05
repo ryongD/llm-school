@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { visibleChapters } from "@/lib/content";
+import { findSitePage, visibleChapters } from "@/lib/content";
 import { PART_NAMES, partColorVar } from "@/lib/curriculum";
 
 /**
@@ -9,6 +9,7 @@ import { PART_NAMES, partColorVar } from "@/lib/curriculum";
  */
 export default function HomePage() {
   const chapters = visibleChapters();
+  const preface = findSitePage("preface");
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12">
@@ -20,8 +21,19 @@ export default function HomePage() {
         중입니다.
       </p>
 
+      {/* 일러두기 — 1챕터 카드 위의 조용한 카드 (DESIGN §6.2) */}
+      {preface ? (
+        <Link
+          href="/preface"
+          className="mt-10 block rounded-card border border-hairline bg-inset px-4 py-3 text-sm-token text-ink-600 no-underline transition-colors duration-(--dur-micro) hover:bg-jjok-100"
+        >
+          처음이신가요? <span className="text-jjok-600">일러두기</span>를 먼저
+          봐도 좋습니다 — 건너뛰어도 됩니다.
+        </Link>
+      ) : null}
+
       {chapters.length > 0 ? (
-        <ul className="mt-10 space-y-3">
+        <ul className="mt-4 space-y-3">
           {chapters.map((c) => (
             <li key={c.id}>
               <Link

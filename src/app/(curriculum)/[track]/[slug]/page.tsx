@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import Link from "next/link";
+
 import { chapterMdxComponents } from "@/components/mdx";
 import { MDXContent } from "@/components/mdx/MDXContent";
 import { MiniToc } from "@/components/chapter/MiniToc";
 import { PartLabel } from "@/components/chapter/PartLabel";
-import { findChapterBySlug, visibleChapters } from "@/lib/content";
+import { findChapterBySlug, findSitePage, visibleChapters } from "@/lib/content";
 
 /**
  * 챕터 페이지 (DESIGN §6.1).
@@ -47,6 +49,20 @@ export default async function ChapterPage({ params }: { params: Params }) {
       <article className="min-w-0 flex-1">
         <div className="prose-chapter">
           <PartLabel chapter={chapter} />
+
+          {/* 첫 챕터 상단 소형 링크 (KICKOFF §7.5) — 일러두기 공개 시에만 */}
+          {chapter.id === "1-1" && findSitePage("preface") ? (
+            <p className="mt-2 text-caption text-ink-600">
+              처음이신가요?{" "}
+              <Link
+                href="/preface"
+                className="text-jjok-600 underline decoration-1 underline-offset-2"
+              >
+                일러두기
+              </Link>
+              를 먼저 봐도 좋습니다 — 건너뛰어도 됩니다.
+            </p>
+          ) : null}
 
           {process.env.NODE_ENV !== "production" &&
           chapter.status !== "published" ? (

@@ -73,6 +73,23 @@ const chapters = defineCollection({
     }),
 });
 
+/**
+ * 단일 페이지 (일러두기 등) — 챕터 스키마가 아닌 별도 페이지 (KICKOFF §7.5).
+ * references 최소 1개 규칙의 명시적 예외. 상태 전이·게이트는 동일 적용.
+ */
+const sitePages = defineCollection({
+  name: "SitePage",
+  pattern: "pages/**/*.mdx",
+  schema: s.object({
+    slug: s.slug("page"),
+    title: s.string(),
+    description: s.string(),
+    lastVerified: isoDate(),
+    status: status(),
+    body: s.mdx(),
+  }),
+});
+
 const glossary = defineCollection({
   name: "GlossaryTerm",
   pattern: "glossary/**/*.mdx",
@@ -109,7 +126,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
-  collections: { chapters, glossary },
+  collections: { chapters, glossary, sitePages },
   mdx: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [
