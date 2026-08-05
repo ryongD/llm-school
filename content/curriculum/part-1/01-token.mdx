@@ -9,7 +9,7 @@ hook: "AI가 'strawberry에 r이 몇 개냐'를 자꾸 틀린다는 이야기가
 ahaMoment: "모델의 눈에 '딸기'는 글자들이 아니라 조각 몇 개다. 맞히는 것은 글자가 보여서가 아니라, 조각과 글자의 관계를 학습 중에 뒤늦게 익혔기 때문이다."
 widgetId: w-tokenizer
 prerequisites: []
-nextHook: "글이 숫자 조각이 됐습니다. 모델은 이 숫자들로 무엇을 할까요?"
+nextHook: "글이 숫자 조각이 됐습니다. 다음에 올 조각을 맞힌다고 했는데 — 숫자만 보고 그게 어떻게 가능할까요?"
 glossaryTerms: ["token", "bpe", "vocabulary"]
 references:
   [
@@ -44,8 +44,12 @@ ChatGPT가 하는 일은 단 하나입니다. 글 조각들을 보고, 다음에
 해결된 걸까요? 절반만 그렇습니다. 모델이 글자를 '보게' 된 것은 아니기
 때문입니다. 무슨 말인지, 설명보다 직접 확인하는 쪽이 빠릅니다.
 
-{/* Figure 자리: 현행 ChatGPT가 딸기 질문에 정답하는 장면 — 재성 캡처
-    (2026-08-06 촬영분) 파일 수령 후 <Figure src alt caption capturedAt>로 삽입 */}
+<Figure
+  src="/images/chatgpt-ddalgi-2026-08-06.png"
+  alt="ChatGPT 대화 화면. '딸기에 ㄹ이 몇 개야?'라는 질문에 '1개야. 딸기의 ㄹ은 딸의 받침 ㄹ 하나야.'라고 답하고, 이어서 'strawberry에서 r이 몇개야?'라는 질문에 '3개야. strawberry.'라고 답한다."
+  caption="그림 1. 현행 ChatGPT는 두 질문 모두 정답을 낸다 — 그런데 글자가 '보여서'일까?"
+  capturedAt="2026-08-06"
+/>
 
 <Widget id="w-tokenizer" />
 
@@ -170,7 +174,7 @@ UTF-8 바이트 256종에서 시작하는 바이트 수준 BPE로, GPT-2가 도�
 **BPE의 기원.** Sennrich 등(2016)은 기계번역의 미등록 단어 문제를 풀기 위해
 Gage(1994)의 압축 알고리즘을 단어 분할에 번안했습니다. 원문의 표현을 빌리면
 목표는 "encoding rare and unknown words as sequences of subword units"였습니다.
-이 논문 이후 서브워드 분할은 신경망 언어 처리의 기본값이 됐습니다.
+이 논문 이후 서브워드 분할은 신경망 언어 처리 전반에 널리 퍼졌습니다.
 
 **언어 간 불공정.** Petrov 등(2023)은 토큰화 격차를 "premium"(같은 내용의
 토큰 수 비율)으로 정의하고 200개 언어 병렬 말뭉치(FLORES-200)로 측정해,
