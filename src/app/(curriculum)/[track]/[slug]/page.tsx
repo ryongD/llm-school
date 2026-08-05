@@ -27,15 +27,15 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { track, slug } = await params;
-  const chapter = findChapterBySlug(slug);
-  if (!chapter || chapter.track !== track) return {};
+  const chapter = findChapterBySlug(track, slug);
+  if (!chapter) return {};
   return { title: chapter.title, description: chapter.hook };
 }
 
 export default async function ChapterPage({ params }: { params: Params }) {
   const { track, slug } = await params;
-  const chapter = findChapterBySlug(slug);
-  if (!chapter || chapter.track !== track) notFound();
+  const chapter = findChapterBySlug(track, slug);
+  if (!chapter) notFound();
 
   const tocItems = chapter.toc.map((entry) => ({
     title: entry.title,

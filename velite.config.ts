@@ -25,9 +25,14 @@ const chapters = defineCollection({
   pattern: "curriculum/**/*.mdx",
   schema: s
     .object({
-      id: s.string(), // 예: "1-1" (파트-챕터)
+      id: s.string(), // 예: "1-1" (파트-챕터) — 중복은 lint가 검사(CP1 C6)
       track: s.string(), // 트랙 slug — 현재 "llm" 고정. §13 멀티트랙 대비
-      slug: s.slug("chapter"), // URL — 예: "token" (컬렉션 내 유일성 검사)
+      // URL — 예: "token". 유일성은 (track, slug) 복합으로 lint가 검사한다.
+      // s.slug()의 전역 유일성은 §13 URL 규칙(/llm/embedding과 /dl/embedding
+      // 공존)과 모순이라 제거했다 (CP1 C5).
+      slug: s
+        .string()
+        .regex(/^[a-z0-9-]+$/, "slug는 소문자·숫자·하이픈만 허용합니다"),
       part: s.number().min(1).max(6),
       order: s.number(),
       title: s.string(), // 예: "토큰: AI가 읽는 글자"
@@ -43,12 +48,29 @@ const chapters = defineCollection({
       depthLevels: s.array(s.enum(["basic", "dev", "research"])),
       toc: s.toc(), // mini TOC용 (DESIGN §6.1 — h2만 렌더)
       body: s.mdx(),
+      raw: s.raw(), // factIds 추출용 — transform에서 제거되고 출력에 남지 않는다
     })
-    .transform((data) => ({
-      ...data,
-      // URL 규칙(§3.4): 커리큘럼 라우트는 트랙 프리픽스를 갖는다 — /llm/token
-      permalink: `/${data.track}/${data.slug}`,
-    })),
+    .transform((data) => {
+      // 본문이 사용한 <FactValue id> 목록 → 검증 배지의 "수치 데이터 검증일"
+      // 배선에 쓴다 (CP1 C7). 코드 펜스·인라인 코드는 제외(예시 오탐 방지).
+      const { raw, ...rest } = data;
+      const stripped = raw
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/`[^`\n]*`/g, "");
+      const factIds = [
+        ...new Set(
+          [...stripped.matchAll(/<FactValue\b[^>]*\bid=["']([^"']+)["']/g)].map(
+            (m) => m[1],
+          ),
+        ),
+      ];
+      return {
+        ...rest,
+        factIds,
+        // URL 규칙(§3.4): 커리큘럼 라우트는 트랙 프리픽스를 갖는다 — /llm/token
+        permalink: `/${data.track}/${data.slug}`,
+      };
+    }),
 });
 
 const glossary = defineCollection({

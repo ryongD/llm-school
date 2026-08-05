@@ -242,6 +242,16 @@
     padding-top: var(--sp-6); /* 라벨 탭 자리 */
   }
 
+  /* lg부터 우측 mini TOC(13rem) + gap(2rem)이 붙어 본문 컬럼 중심이 뷰포트
+   * 중심에서 좌측으로 밀린다 — 브레이크아웃 폭 상한을 그만큼 줄여 좌측
+   * 이탈(1024~1143px 구간 약 40px 잘림)을 막는다 (CP1 반영, 2026-08-06).
+   * 1144px 이상에서는 min()이 다시 54rem을 선택해 원래 폭이 복원된다. */
+  @media (min-width: 1024px) {
+    .widget-breakout {
+      width: min(54rem, calc(100vw - 40px - 15rem));
+    }
+  }
+
   /* 모눈 — 16px 격자. 위젯 셸 전용 신호(정적 그림·페이지 배경 사용 금지) */
   .widget-grid-bg {
     background-image:

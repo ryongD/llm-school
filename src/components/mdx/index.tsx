@@ -2,6 +2,7 @@ import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
 
 import type { Chapter } from "#velite";
 import { findChapterById, nextChapterOf } from "@/lib/content";
+import { factsDateForIds } from "@/lib/facts";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { CheckQuestion } from "./CheckQuestion";
 import { Depth } from "./Depth";
@@ -72,7 +73,11 @@ export function chapterMdxComponents(chapter: Chapter): MDXComponentMap {
     Refs: () => (
       <>
         <Refs referenceKeys={chapter.references} />
-        <VerifiedBadge principleDate={chapter.lastVerified} />
+        <VerifiedBadge
+          principleDate={chapter.lastVerified}
+          // 본문 <FactValue> 사용분에서 도출한 수치 데이터 검증일 (CP1 C7)
+          factsDate={factsDateForIds(chapter.factIds)}
+        />
       </>
     ),
     NextHook: () => (

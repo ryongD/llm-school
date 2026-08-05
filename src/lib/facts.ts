@@ -97,3 +97,13 @@ export function resolveFact(id: string): ResolvedFact {
   }
   return { value: node, meta: data._meta, file };
 }
+
+/**
+ * 챕터가 사용한 FactValue id 목록으로 "수치 데이터 검증일"을 구한다 (CP1 C7).
+ * 여러 facts 파일을 썼다면 가장 오래된 검증일 — 신선도는 최약 고리 기준.
+ */
+export function factsDateForIds(ids: string[]): string | undefined {
+  if (ids.length === 0) return undefined;
+  const dates = ids.map((id) => resolveFact(id).meta.lastVerified);
+  return [...dates].sort()[0];
+}

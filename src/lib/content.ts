@@ -16,8 +16,12 @@ export function visibleChapters(): Chapter[] {
   return list.sort((a, b) => a.part - b.part || a.order - b.order);
 }
 
-export function findChapterBySlug(slug: string): Chapter | undefined {
-  return visibleChapters().find((c) => c.slug === slug);
+/** slug는 트랙 내에서만 유일하다(§13 URL 규칙, CP1 C5) — 반드시 track과 함께 조회 */
+export function findChapterBySlug(
+  track: string,
+  slug: string,
+): Chapter | undefined {
+  return visibleChapters().find((c) => c.track === track && c.slug === slug);
 }
 
 export function findChapterById(id: string): Chapter | undefined {
