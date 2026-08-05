@@ -14,5 +14,6 @@ export const meta: WidgetMeta = {
   sizeBudgetKB: 10,
   heightPx: 200,
   toolPage: true, // 챕터 임베드 ↔ 도구 페이지 컴포넌트 공유 관통 검증(§3.2)
+  toolSlug: "dummy-counter",
   chapterId: "0-0",
 };

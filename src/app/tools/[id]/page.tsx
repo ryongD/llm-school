@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { WidgetHost } from "@/components/widget/WidgetHost";
 import { WidgetSheet } from "@/components/widget/WidgetSheet";
 import { findChapterById } from "@/lib/content";
-import { findWidgetMeta, widgetMetas } from "@/widgets/widget-ids";
+import { widgetMetas } from "@/widgets/widget-ids";
 
 /**
  * 도구 페이지 (KICKOFF §7.4, DESIGN §6.4).
@@ -15,8 +15,15 @@ import { findWidgetMeta, widgetMetas } from "@/widgets/widget-ids";
 
 export const dynamicParams = false;
 
+/** URL은 meta.toolSlug 기준 — §7.4의 /tools/tokenizer 형태를 지킨다 */
+function findByToolSlug(slug: string) {
+  return widgetMetas.find((m) => m.toolPage && m.toolSlug === slug);
+}
+
 export function generateStaticParams() {
-  return widgetMetas.filter((m) => m.toolPage).map((m) => ({ id: m.id }));
+  return widgetMetas
+    .filter((m) => m.toolPage && m.toolSlug)
+    .map((m) => ({ id: m.toolSlug! }));
 }
 
 type Params = Promise<{ id: string }>;
@@ -27,15 +34,15 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { id } = await params;
-  const meta = findWidgetMeta(id);
+  const meta = findByToolSlug(id);
   if (!meta) return {};
   return { title: meta.title, description: meta.description };
 }
 
 export default async function ToolPage({ params }: { params: Params }) {
   const { id } = await params;
-  const meta = findWidgetMeta(id);
-  if (!meta || !meta.toolPage) notFound();
+  const meta = findByToolSlug(id);
+  if (!meta) notFound();
 
   const chapter = meta.chapterId ? findChapterById(meta.chapterId) : undefined;
 

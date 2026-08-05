@@ -20,8 +20,10 @@ export interface WidgetMeta {
    * ("이 계산은 브라우저에서 실시간으로 수행됩니다")를 쓴다.
    */
   dataCaption?: string;
-  /** 도구 페이지(/tools/[id]) 단독 노출 여부 (KICKOFF §3.2·§7.4) */
+  /** 도구 페이지 단독 노출 여부 (KICKOFF §3.2·§7.4) */
   toolPage?: boolean;
+  /** 도구 페이지 URL 조각 — §7.4의 /tools/tokenizer 형태. toolPage면 필수 */
+  toolSlug?: string;
   /** "원리가 궁금하다면 → 챕터" 링크 대상 (§6.4) */
   chapterId?: string;
 }
