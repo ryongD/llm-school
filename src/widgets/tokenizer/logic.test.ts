@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import {
   clampInput,
+  formatBytes,
   loadTokenizer,
   MAX_INPUT_CHARS,
   tokenRatio,
@@ -60,6 +61,15 @@ describe("w-tokenizer 골든 (o200k_base)", () => {
     expect(pieces[0].text).toBeNull();
     expect(pieces[1].text).toBeNull();
     expect(pieces[2].text).toBe("기");
+  });
+
+  it("1-1 본문 인용값 — '딸기' 토큰 ID·바이트 (챕터 dev 카드가 직접 인용, CP2 A-6-3)", () => {
+    // 챕터 본문·dev 카드가 이 값을 산문으로 인용한다 — 라이브러리 갱신으로
+    // 인코딩이 바뀌면 본문도 함께 고쳐야 하므로 여기서 고정한다(§11.2-4).
+    const { pieces } = o200k.tokenize("딸기");
+    expect(pieces.map((p) => p.id)).toEqual([15492, 116, 4283]);
+    expect(formatBytes(pieces[0].bytes)).toBe("EB 94");
+    expect(formatBytes(pieces[1].bytes)).toBe("B8");
   });
 
   it("조각 바이트를 이어 붙이면 원문과 정확히 일치한다 (무손실 분해)", () => {
