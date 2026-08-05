@@ -1,0 +1,96 @@
+---
+id: "0-0"
+track: llm
+slug: dummy
+part: 1
+order: 0
+title: "더미 챕터: 파이프라인 관통 검증"
+hook: "이 자리에 실제 챕터의 훅 질문이 들어가면, 시스템의 모든 부품이 함께 움직이는가?"
+ahaMoment: "스키마·위젯·용어·참고문헌·린트가 한 챕터 안에서 전부 연결되어 있다."
+widgetId: dummy-counter
+prerequisites: []
+nextHook: "다음 챕터가 생기면 이 연결 질문이 카드로 렌더된다."
+glossaryTerms: ["dummy-term"]
+references: ["vaswani2017"]
+lastVerified: "2026-08-05"
+status: published
+depthLevels: ["basic", "dev", "research"]
+---
+
+<Prereq />
+
+이 챕터는 Phase 0의 DoD 검증용 더미다. 실제 교육 콘텐츠가 아니며, LLM에
+관한 어떤 사실 주장도 담지 않는다 — 사실 주장은 게이트를 통과한 실제
+챕터(Phase 1~)에서만 쓴다(KICKOFF §11.2). 이 문단은 "도입 2~4문단" 자리의
+채움 텍스트로, 아래 위젯으로 독자를 초대하는 역할만 흉내 낸다.
+
+<Widget id="dummy-counter" />
+
+이렇게 해보세요:
+
+1. 슬라이더를 끝까지 밀어 값이 즉시 반응하는지 보세요.
+2. 키보드 방향키로도 조절되는지 확인하세요.
+3. 하단 요약 문장이 값과 함께 갱신되는지 보세요.
+
+## 본문 조판 검증
+
+이 절은 본문 h2 제목, 문단 간격, <Term slug="dummy-term">더미 용어</Term>
+팝오버, 그리고 시효성 수치 컴포넌트를 검증한다. 파이프라인 검증용 장난감
+수치는 이렇게 렌더된다: <FactValue id="dummy.answer" />.
+
+표 조판도 확인한다 (가로 헤어라인만 — DESIGN §5.6):
+
+| 구성 요소 | 담당 검사 |
+| --- | --- |
+| Velite 스키마 | frontmatter 필드·형식 |
+| 콘텐츠 린트 | 위젯·용어·참고문헌 교차 검증 |
+| 골든 테스트 | 위젯 계산 로직 고정 |
+
+<Depth level="dev" hint="이 카드는 더 깊이 보고 싶을 때만 열면 됩니다">
+
+개발자 레이어의 수식 조판 검증용 항등식이다 (장난감 예제 — 수학적 자명값,
+모델 값 아님):
+
+$$(a+b)^2 = a^2 + 2ab + b^2$$
+
+코드 블록 하이라이트(Shiki, 토큰 기반 테마)도 함께 검증한다:
+
+```python
+def square(n: int) -> int:
+    """더미 위젯 logic.ts와 같은 계산 — 골든 테스트 대상."""
+    return n * n
+```
+
+</Depth>
+
+<Depth level="research">
+
+연구 레이어 자리다. 실제 챕터에서는 원문 인용(15단어 미만 + 출처 링크)과
+논쟁 지점이 들어간다. 더미에서는 조판만 확인한다.
+
+<Figure caption="그림 1. 더미 다이어그램 — 인라인 SVG·토큰 색·본문 폭 유지 검증용 (내용 없음)">
+  <svg viewBox="0 0 400 80" role="img" aria-label="상자 A에서 상자 B로 화살표가 이어지는 더미 다이어그램">
+    <rect x="10" y="20" width="120" height="40" rx="6" fill="var(--jjok-100)" stroke="var(--jjok-600)" strokeWidth="1.5" />
+    <text x="70" y="45" textAnchor="middle" fontSize="14" fill="var(--ink-900)">입력 A</text>
+    <line x1="130" y1="40" x2="260" y2="40" stroke="var(--jjok-600)" strokeWidth="1.5" />
+    <path d="M260 40 l-8 -5 v10 z" fill="var(--jjok-600)" />
+    <rect x="264" y="20" width="120" height="40" rx="6" fill="var(--bg-inset)" stroke="var(--jjok-600)" strokeWidth="1.5" />
+    <text x="324" y="45" textAnchor="middle" fontSize="14" fill="var(--ink-900)">출력 B</text>
+  </svg>
+</Figure>
+
+</Depth>
+
+## 마무리 요소 검증
+
+챕터 하단 고정 순서(확인 질문 → 참고문헌 → 검증 배지 → 다음 챕터 카드)를
+아래에서 확인한다. 참고문헌 표기는 렌더 검증용이며 본문이 해당 문헌의
+내용을 인용하지 않는다.
+
+<CheckQuestion answer="확인 질문 카드가 탭으로 열리고 닫히면 통과다.">
+  이 확인 질문 카드는 정상 동작하는가?
+</CheckQuestion>
+
+<Refs />
+
+<NextHook />

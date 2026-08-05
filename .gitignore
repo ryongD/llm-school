@@ -1,0 +1,26 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# velite (생성 산출물 — 소스는 content/·data/)
+/.velite/
+/public/static/
+
+# testing
+/coverage/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo

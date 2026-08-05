@@ -1,0 +1,194 @@
+/**
+ * llm-school 디자인 토큰 — 단일 진입점 (DESIGN.md §2)
+ *
+ * 모든 시각 결정은 이 파일을 통과한다. 컴포넌트에서 hex 직접 사용 금지(린트 검사).
+ * 이 파일 교체만으로 사이트 전체 리스킨이 가능해야 한다(DESIGN §11.2).
+ * §1(방향)·§2(토큰) 변경은 재성 승인 필요.
+ */
+
+/* ========== 2.1 색 — 라이트 모드 (도면지) ========== */
+:root {
+  /* 지면 */
+  --bg-page: #f7f7f4; /* 차가운 회백 종이 — 크림 아님 */
+  --bg-sheet: #ffffff; /* 위젯 도면 시트, 카드 */
+  --bg-inset: #eeeeea; /* 입력 필드, 코드 인라인 배경 */
+  --grid-line: rgba(52, 88, 143, 0.055); /* 모눈 — 쪽빛 5.5% */
+
+  /* 잉크(텍스트) */
+  --ink-900: #191b1f; /* 본문 */
+  --ink-600: #50555e; /* 보조 텍스트 */
+  --ink-400: #878d97; /* 캡션·플레이스홀더 (본문 크기에서 사용 금지) */
+
+  /* 경계 */
+  --hairline: #deded7;
+  --hairline-strong: #c7c7bf;
+
+  /* 쪽빛 (기간색 — 링크·포커스·구조·다이어그램) */
+  --jjok-100: #e3eaf4;
+  --jjok-200: #c2d2e8;
+  --jjok-400: #6b8cbe;
+  --jjok-500: #4a6fa5;
+  --jjok-600: #34588f; /* 링크 기본 */
+  --jjok-700: #27436f;
+  --jjok-800: #1c3152;
+  --jjok-900: #14233c;
+
+  /* 인주 (도장 전용 — DESIGN §1.3-6) */
+  --inju-500: #c7442e;
+  --inju-100: #f7e7e2;
+
+  /* 의미색 (아이콘+텍스트 병행 필수 — 색 단독 전달 금지) */
+  --ok: #2f6d53;
+  --warn: #9a6b1f;
+  --err: #b02e2e;
+}
+
+/* ========== 2.2 색 — 다크 모드 (청사진) ==========
+ * 쪽빛 램프는 역순 의미(600이 항상 '링크 기본')로 값을 뒤집어 정의 —
+ * 컴포넌트 코드가 모드를 몰라도 된다. 순수 #FFF/#000 사용 금지. */
+:root[data-theme="dark"] {
+  --bg-page: #14181f; /* 남색 기운의 근흑 — 청사진 바탕 */
+  --bg-sheet: #1a1f29;
+  --bg-inset: #222834;
+  --grid-line: rgba(143, 174, 220, 0.07);
+
+  --ink-900: #e8e8e2;
+  --ink-600: #abb0b8;
+  --ink-400: #767c86;
+  --hairline: #2a3038;
+  --hairline-strong: #3a414c;
+
+  --jjok-100: #223349;
+  --jjok-200: #2c4262;
+  --jjok-400: #5e82b4;
+  --jjok-500: #7397c7;
+  --jjok-600: #8faedc; /* 다크 링크 */
+  --jjok-700: #aec5e8;
+  --jjok-800: #ccdaf1;
+  --jjok-900: #e4ecf8;
+
+  --inju-500: #e0705c;
+  --inju-100: #3c2724;
+  --ok: #63a886;
+  --warn: #c99a4e;
+  --err: #d96a61;
+}
+
+/* ========== 2.3 콘텐츠 시맨틱 팔레트 (교육용 — 의미 고정) ==========
+ * 색이 곧 정보다. 챕터·위젯·다이어그램 어디서든 동일 매핑(색 = 복습 장치). */
+:root {
+  /* 토큰(text token) 블록 — 순환 6색. 인접 블록 동일색 금지 */
+  --tk-1-bg: #dce7f3;
+  --tk-1-fg: #27436f;
+  --tk-2-bg: #dfede4;
+  --tk-2-fg: #2f6d53;
+  --tk-3-bg: #f4e9d7;
+  --tk-3-fg: #7c5518;
+  --tk-4-bg: #ede1ec;
+  --tk-4-fg: #6e3a62;
+  --tk-5-bg: #dcedea;
+  --tk-5-fg: #275f56;
+  --tk-6-bg: #efe2db;
+  --tk-6-fg: #7d4a2f;
+
+  /* 어텐션 세기 — 단일 색상 + 이중 인코딩(투명도 & 굵기)
+   * 세기 0→1: opacity 0.15→1.0, stroke-width 1→4px. 색상만으로 구분 금지 */
+  --attn-hue: var(--jjok-600);
+
+  /* 파트 난이도 = 쪽빛의 깊이 (깊어질수록 심화 — 구조가 정보) */
+  --part-intro: var(--jjok-400); /* 파트 1–2 입문 */
+  --part-mid: var(--jjok-600); /* 파트 3–4 중급 */
+  --part-advanced: var(--jjok-800); /* 파트 5–6 심화 */
+
+  /* 확률/수치 막대 기본 */
+  --bar-fill: var(--jjok-500);
+  --bar-track: var(--bg-inset);
+}
+
+/* 토큰 블록 다크 모드 — §2.3 규칙에 따른 파생 정의: 동일 색상(hue) 유지,
+ * 명도만 반전. fg/bg 대비 4.5:1 이상 목표(스타일가이드 토큰 시트에서 실측 표기). */
+:root[data-theme="dark"] {
+  --tk-1-bg: #24384f;
+  --tk-1-fg: #a9c6e8;
+  --tk-2-bg: #22392e;
+  --tk-2-fg: #a3cdb6;
+  --tk-3-bg: #3d3221;
+  --tk-3-fg: #e3c58e;
+  --tk-4-bg: #3a2a38;
+  --tk-4-fg: #ddb8d6;
+  --tk-5-bg: #1f3835;
+  --tk-5-fg: #9fd0c8;
+  --tk-6-bg: #3c2c23;
+  --tk-6-fg: #dfb69f;
+}
+
+/* ========== 2.4 타이포그래피 토큰 ========== */
+:root {
+  --font-display: "MaruBuri", "Noto Serif KR", serif; /* 제목·훅 전용 — 웹폰트 탑재는 D8 대기 */
+  --font-body: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "D2Coding", ui-monospace, monospace;
+
+  --text-display: 1.875rem; /* 30px — 챕터 제목 (모바일 1.625rem) */
+  --text-hook: 1.3125rem; /* 21px — 훅 인용 */
+  --text-h2: 1.375rem; /* 22px */
+  --text-h3: 1.125rem; /* 18px */
+  --text-body: 1.09375rem; /* 17.5px (모바일 17px) */
+  --text-sm: 0.9375rem; /* 15px — 보조·조작 가이드 */
+  --text-caption: 0.8125rem; /* 13px — 캡션·배지. 이 아래 크기 사용 금지 */
+
+  --leading-body: 1.85;
+  --tracking-body: -0.011em; /* Pretendard 한글 권장 자간 */
+  --measure: 42rem; /* 본문 최대 폭 672px ≈ 한 줄 37자 안팎 */
+}
+
+@media (max-width: 767px) {
+  :root {
+    --text-display: 1.625rem; /* 26px — 모바일 챕터 제목 */
+    --text-body: 1.0625rem; /* 17px — 모바일 본문 */
+  }
+}
+
+/* ========== 2.5 간격·형태·모션·기타 ========== */
+:root {
+  /* 간격 — 4px 스케일 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-24: 96px;
+
+  /* 라운드 — 공학적 절제 (8px 초과 라운드는 카드 외 요소 금지, §1.3-5) */
+  --r-ctl: 6px; /* 버튼·입력·칩 */
+  --r-card: 8px; /* 카드·Depth·콜아웃 */
+  --r-sheet: 10px; /* 위젯 도면 시트 (최대값) */
+
+  /* 모션 — UI 모션은 두 단계만(§7-3) */
+  --dur-micro: 120ms; /* hover·press */
+  --dur-ui: 240ms; /* 펼침·전환 */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* 포커스 — 절대 제거 금지(§8) */
+  --focus-ring: 2px solid var(--jjok-500);
+  --focus-offset: 2px;
+
+  /* 그림자 — 팝오버 1단계만(§1.3-2) */
+  --shadow-pop: 0 4px 16px rgba(20, 24, 31, 0.1);
+
+  /* z-index */
+  --z-toc: 10;
+  --z-header: 20;
+  --z-popover: 30;
+  --z-hint: 40;
+}
+
+/* 네이티브 UI(폼·스크롤바) 색 동기화 */
+:root {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}

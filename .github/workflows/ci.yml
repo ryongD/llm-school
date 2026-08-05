@@ -1,0 +1,37 @@
+# CI — 빌드·테스트·린트 (KICKOFF §4.5 배포 차단 조건 포함)
+# 어떤 스텝이든 실패하면 배포 불가. 콘텐츠 린트가 여기서 게이트 역할을 한다.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build (velite --strict + next build)
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Golden tests
+        run: npm run test
+
+      - name: Content lint (KICKOFF §4.5)
+        run: npm run lint:content
+
+      - name: Style lint (hex 금지 — DESIGN §2)
+        run: npm run lint:styles

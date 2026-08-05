@@ -1,0 +1,268 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/**
+ * Tailwind v4 ↔ 디자인 토큰 브리지.
+ * 값은 전부 tokens.css의 CSS 변수를 참조한다 — 여기에 색·크기 원값을 쓰지 않는다.
+ */
+@theme inline {
+  /* 색 유틸리티 (bg-page, text-ink-600, border-hairline, bg-jjok-100 …) */
+  --color-page: var(--bg-page);
+  --color-sheet: var(--bg-sheet);
+  --color-inset: var(--bg-inset);
+  --color-ink-900: var(--ink-900);
+  --color-ink-600: var(--ink-600);
+  --color-ink-400: var(--ink-400);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-jjok-100: var(--jjok-100);
+  --color-jjok-200: var(--jjok-200);
+  --color-jjok-400: var(--jjok-400);
+  --color-jjok-500: var(--jjok-500);
+  --color-jjok-600: var(--jjok-600);
+  --color-jjok-700: var(--jjok-700);
+  --color-jjok-800: var(--jjok-800);
+  --color-jjok-900: var(--jjok-900);
+  --color-inju-500: var(--inju-500);
+  --color-inju-100: var(--inju-100);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-err: var(--err);
+
+  /* 라운드 (rounded-ctl / rounded-card / rounded-sheet) */
+  --radius-ctl: var(--r-ctl);
+  --radius-card: var(--r-card);
+  --radius-sheet: var(--r-sheet);
+}
+
+/* Tailwind 기본 font-sans/font-mono가 토큰 스택을 쓰도록 연결 */
+:root {
+  --font-sans: var(--font-body);
+  /* --font-mono는 tokens.css 정의가 Tailwind 기본값을 그대로 덮는다 */
+}
+
+/* 토큰 참조 커스텀 유틸리티 (기본 테마와 이름 충돌 없는 것만 @utility로) */
+@utility font-display {
+  font-family: var(--font-display);
+}
+@utility font-body {
+  font-family: var(--font-body);
+}
+@utility text-display {
+  font-size: var(--text-display);
+}
+@utility text-hook {
+  font-size: var(--text-hook);
+}
+@utility text-h2 {
+  font-size: var(--text-h2);
+}
+@utility text-h3 {
+  font-size: var(--text-h3);
+}
+@utility text-body {
+  font-size: var(--text-body);
+}
+@utility text-sm-token {
+  font-size: var(--text-sm);
+}
+@utility text-caption {
+  font-size: var(--text-caption);
+}
+@utility shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========== Shiki 코드 하이라이트 — 토큰 매핑 (DESIGN §4.9) ==========
+ * velite.config.ts의 CSS 변수 테마가 var(--shiki-*)를 출력하고,
+ * 여기서 디자인 토큰으로 연결한다. 라이트=도면지 위 잉크, 다크=청사진 자동. */
+:root {
+  --shiki-foreground: var(--ink-900);
+  --shiki-background: var(--bg-inset);
+  --shiki-token-constant: var(--jjok-700);
+  --shiki-token-string: var(--ok);
+  --shiki-token-comment: var(--ink-400);
+  --shiki-token-keyword: var(--jjok-600);
+  --shiki-token-parameter: var(--warn);
+  --shiki-token-function: var(--jjok-800);
+  --shiki-token-string-expression: var(--ok);
+  --shiki-token-punctuation: var(--ink-600);
+  --shiki-token-link: var(--jjok-600);
+}
+
+/* ========== 기본 조판 (DESIGN §3.3) ========== */
+@layer base {
+  body {
+    background-color: var(--bg-page);
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+  }
+
+  /* 포커스 링 — 절대 제거 금지 (DESIGN §8) */
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  /* 모션 감소 선호 시 UI 잔여 모션 제거 (DESIGN §7-4) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ========== 챕터 본문 조판 (DESIGN §3.3 — MDX 렌더 대상) ========== */
+@layer components {
+  .prose-chapter {
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+
+  .prose-chapter > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose-chapter h2 {
+    font-size: var(--text-h2);
+    font-weight: 700;
+    margin-top: var(--sp-16);
+    margin-bottom: var(--sp-4);
+    line-height: 1.4;
+  }
+
+  .prose-chapter h3 {
+    font-size: var(--text-h3);
+    font-weight: 700;
+    margin-top: var(--sp-12);
+    margin-bottom: var(--sp-3);
+    line-height: 1.4;
+  }
+
+  /* 링크 — 쪽빛 + 밑줄(1px, offset 3px). 밑줄은 링크 전용(§3.3) */
+  .prose-chapter a {
+    color: var(--jjok-600);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  /* 인용·훅 — 마루 부리, 좌측 2px 쪽빛 룰(§3.3) */
+  .prose-chapter blockquote {
+    font-family: var(--font-display);
+    font-size: var(--text-hook);
+    color: var(--ink-900);
+    border-left: 2px solid var(--jjok-400);
+    padding-left: var(--sp-4);
+    line-height: 1.7;
+  }
+
+  .prose-chapter ul,
+  .prose-chapter ol {
+    padding-left: 1.5em;
+  }
+  .prose-chapter ul {
+    list-style: disc;
+  }
+  .prose-chapter ol {
+    list-style: decimal;
+  }
+  .prose-chapter li + li {
+    margin-top: 0.4em;
+  }
+
+  .prose-chapter hr {
+    border: 0;
+    border-top: 1px solid var(--hairline);
+    margin-block: var(--sp-12);
+  }
+
+  /* 인라인 코드 */
+  .prose-chapter :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: var(--bg-inset);
+    border-radius: var(--r-ctl);
+    padding: 0.1em 0.35em;
+  }
+
+  /* 코드 블록 (DESIGN §4.9 — Shiki, --bg-inset 배경) */
+  .prose-chapter pre {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    background-color: var(--bg-inset) !important;
+    border-radius: var(--r-card);
+    padding: var(--sp-4);
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+
+  /* 표 — 가로 헤어라인만, 세로줄·지브라 금지 (DESIGN §5.6) */
+  .prose-chapter table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose-chapter th {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: left;
+    border-top: 2px solid var(--hairline-strong);
+    border-bottom: 1px solid var(--hairline);
+    padding: var(--sp-2) var(--sp-3);
+  }
+  .prose-chapter td {
+    border-bottom: 1px solid var(--hairline);
+    padding: var(--sp-2) var(--sp-3);
+  }
+  /* 모바일 3열 초과 표 가로 스크롤 래퍼 */
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  /* ===== 위젯 도면 시트 (DESIGN §5.1) ===== */
+
+  /* 본문 컬럼(42rem)을 벗어나는 54rem 브레이크아웃 — "만지는 구간" 신호 */
+  .widget-breakout {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(54rem, calc(100vw - 40px));
+    padding-top: var(--sp-6); /* 라벨 탭 자리 */
+  }
+
+  /* 모눈 — 16px 격자. 위젯 셸 전용 신호(정적 그림·페이지 배경 사용 금지) */
+  .widget-grid-bg {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* 인주 도장 찍힘 모션 (DESIGN §1.2 — 220ms 스케일 다운 + -5° 회전, 1회) */
+  .stamp-in {
+    animation: stamp-in 220ms var(--ease) both;
+  }
+}
+
+@keyframes stamp-in {
+  from {
+    transform: rotate(-5deg) scale(1.6);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(-5deg) scale(1);
+    opacity: 1;
+  }
+}

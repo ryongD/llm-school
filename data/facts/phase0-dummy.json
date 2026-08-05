@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "lastVerified": "2026-08-05",
+    "verifiedBy": "Claude Code — Phase 0 파이프라인 검증용 (Phase 1에서 삭제)"
+  },
+  "dummy": {
+    "answer": {
+      "value": 42,
+      "note": "파이프라인 검증용 장난감 값 — 실데이터 아님",
+      "sourceRef": "phase0-dummy"
+    }
+  }
+}

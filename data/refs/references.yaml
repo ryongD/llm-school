@@ -1,0 +1,405 @@
+# 전역 참고문헌 DB (KICKOFF §5.1)
+# - 초기 시드: KICKOFF §6 커리큘럼에 등장한 전 키 48개 (Phase 0, 2026-08-05)
+# - 모든 URL은 §11.2-5에 따라 실제 접속을 확인한 뒤 기입했다 (arXiv 35건: 페이지
+#   메타데이터 대조 / PDF 4건: 본문 1면 텍스트 추출 대조 / 문서 7건: 페이지 로드 확인
+#   / nature·openai 플랫폼: 브라우저 실접속 확인).
+# - docs 타입의 year는 문서 발행 연도가 명확한 경우 그 값, 아니면 접속 확인 연도다.
+# - 등급: S1 원 논문 / S2 공식 문서 / S3 검증된 2차 자료 (X는 등재 금지 — §5.1)
+
+# ---------- 파트 1 ----------
+
+sennrich2016:
+  type: paper
+  title: "Neural Machine Translation of Rare Words with Subword Units"
+  authors: "Sennrich, Haddow & Birch"
+  year: 2016 # arXiv 2015-08 제출, ACL 2016 발표
+  url: "https://arxiv.org/abs/1508.07909"
+  grade: S1
+
+petrov2023:
+  type: paper
+  title: "Language Model Tokenizers Introduce Unfairness Between Languages"
+  authors: "Petrov, La Malfa, Torr & Bibi"
+  year: 2023
+  url: "https://arxiv.org/abs/2305.15425"
+  grade: S1
+
+openai-tokenizer-docs:
+  type: docs
+  title: "OpenAI Tokenizer (공식 토크나이저 도구·해설)"
+  authors: "OpenAI"
+  year: 2026 # 접속 확인 연도. 프로그래매틱 문서는 github.com/openai/tiktoken (접속 확인 완료)
+  url: "https://platform.openai.com/tokenizer"
+  grade: S2
+
+radford2019:
+  type: paper
+  title: "Language Models are Unsupervised Multitask Learners (GPT-2)"
+  authors: "Radford, Wu, Child, Luan, Amodei & Sutskever"
+  year: 2019
+  url: "https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf"
+  grade: S1
+
+shannon1951:
+  type: paper
+  title: "Prediction and Entropy of Printed English"
+  authors: "Shannon"
+  year: 1951 # Bell System Technical Journal 30(1)
+  url: "https://www.princeton.edu/~wbialek/rome/refs/shannon_51.pdf"
+  grade: S1
+
+bengio2003:
+  type: paper
+  title: "A Neural Probabilistic Language Model"
+  authors: "Bengio, Ducharme, Vincent & Jauvin"
+  year: 2003 # JMLR 3
+  url: "https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf"
+  grade: S1
+
+mikolov2013:
+  type: paper
+  title: "Efficient Estimation of Word Representations in Vector Space (word2vec)"
+  authors: "Mikolov, Chen, Corrado & Dean"
+  year: 2013
+  url: "https://arxiv.org/abs/1301.3781"
+  grade: S1
+
+jurafsky-slp3:
+  type: docs
+  title: "Speech and Language Processing (3rd ed. draft)"
+  authors: "Jurafsky & Martin"
+  year: 2026 # 공개 초안 최신 릴리스(2026-01-06 확인)
+  url: "https://web.stanford.edu/~jurafsky/slp3/"
+  grade: S2
+
+# ---------- 파트 2 ----------
+
+vaswani2017:
+  type: paper
+  title: "Attention Is All You Need"
+  authors: "Vaswani et al."
+  year: 2017
+  url: "https://arxiv.org/abs/1706.03762"
+  grade: S1
+
+bahdanau2014:
+  type: paper
+  title: "Neural Machine Translation by Jointly Learning to Align and Translate"
+  authors: "Bahdanau, Cho & Bengio"
+  year: 2014 # arXiv 2014-09, ICLR 2015 발표
+  url: "https://arxiv.org/abs/1409.0473"
+  grade: S1
+
+hochreiter1997:
+  type: paper
+  title: "Long Short-Term Memory"
+  authors: "Hochreiter & Schmidhuber"
+  year: 1997 # Neural Computation 9(8) 1735-1780
+  # DOI가 direct.mit.edu의 해당 논문(9권 8호 1735-1780)으로 리졸브되는 것을 확인.
+  # 퍼블리셔 페이지는 봇 차단(403)이라 본문 열람은 미확인 — 재성 브라우저 1클릭 확인 권장.
+  url: "https://doi.org/10.1162/neco.1997.9.8.1735"
+  grade: S1
+
+clark2019:
+  type: paper
+  title: "What Does BERT Look At? An Analysis of BERT's Attention"
+  authors: "Clark, Khandelwal, Levy & Manning"
+  year: 2019
+  url: "https://arxiv.org/abs/1906.04341"
+  grade: S1
+
+he2016:
+  type: paper
+  title: "Deep Residual Learning for Image Recognition (ResNet)"
+  authors: "He, Zhang, Ren & Sun"
+  year: 2016 # arXiv 2015-12, CVPR 2016 발표
+  url: "https://arxiv.org/abs/1512.03385"
+  grade: S1
+
+geva2021:
+  type: paper
+  title: "Transformer Feed-Forward Layers Are Key-Value Memories"
+  authors: "Geva, Schuster, Berant & Levy"
+  year: 2021 # arXiv 2020-12, EMNLP 2021 발표
+  url: "https://arxiv.org/abs/2012.14913"
+  grade: S1
+
+su2021:
+  type: paper
+  title: "RoFormer: Enhanced Transformer with Rotary Position Embedding (RoPE)"
+  authors: "Su, Lu, Pan, Murtadha, Wen & Liu"
+  year: 2021
+  url: "https://arxiv.org/abs/2104.09864"
+  grade: S1
+
+radford2018:
+  type: paper
+  title: "Improving Language Understanding by Generative Pre-Training (GPT-1)"
+  authors: "Radford, Narasimhan, Salimans & Sutskever"
+  year: 2018
+  url: "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf"
+  grade: S1
+
+# ---------- 파트 3 ----------
+
+devlin2018:
+  type: paper
+  title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"
+  authors: "Devlin, Chang, Lee & Toutanova"
+  year: 2018 # arXiv 2018-10, NAACL 2019 발표
+  url: "https://arxiv.org/abs/1810.04805"
+  grade: S1
+
+brown2020:
+  type: paper
+  title: "Language Models are Few-Shot Learners (GPT-3)"
+  authors: "Brown et al."
+  year: 2020
+  url: "https://arxiv.org/abs/2005.14165"
+  grade: S1
+
+kaplan2020:
+  type: paper
+  title: "Scaling Laws for Neural Language Models"
+  authors: "Kaplan et al."
+  year: 2020
+  url: "https://arxiv.org/abs/2001.08361"
+  grade: S1
+
+hoffmann2022:
+  type: paper
+  title: "Training Compute-Optimal Large Language Models (Chinchilla)"
+  authors: "Hoffmann et al."
+  year: 2022
+  url: "https://arxiv.org/abs/2203.15556"
+  grade: S1
+
+rumelhart1986:
+  type: paper
+  title: "Learning representations by back-propagating errors"
+  authors: "Rumelhart, Hinton & Williams"
+  year: 1986 # Nature 323
+  url: "https://www.nature.com/articles/323533a0"
+  grade: S1
+
+goodfellow-dlbook:
+  type: docs
+  title: "Deep Learning (교과서, 온라인 무료 공개판)"
+  authors: "Goodfellow, Bengio & Courville"
+  year: 2016
+  url: "https://www.deeplearningbook.org/"
+  grade: S2
+
+kingma2014:
+  type: paper
+  title: "Adam: A Method for Stochastic Optimization"
+  authors: "Kingma & Ba"
+  year: 2014 # arXiv 2014-12, ICLR 2015 발표
+  url: "https://arxiv.org/abs/1412.6980"
+  grade: S1
+
+wei2021:
+  type: paper
+  title: "Finetuned Language Models Are Zero-Shot Learners (FLAN)"
+  authors: "Wei et al."
+  year: 2021
+  url: "https://arxiv.org/abs/2109.01652"
+  grade: S1
+
+ouyang2022:
+  type: paper
+  title: "Training language models to follow instructions with human feedback (InstructGPT)"
+  authors: "Ouyang et al."
+  year: 2022
+  url: "https://arxiv.org/abs/2203.02155"
+  grade: S1
+
+rafailov2023:
+  type: paper
+  title: "Direct Preference Optimization: Your Language Model is Secretly a Reward Model (DPO)"
+  authors: "Rafailov, Sharma, Mitchell, Ermon, Manning & Finn"
+  year: 2023
+  url: "https://arxiv.org/abs/2305.18290"
+  grade: S1
+
+christiano2017:
+  type: paper
+  title: "Deep reinforcement learning from human preferences"
+  authors: "Christiano, Leike, Brown, Martic, Legg & Amodei"
+  year: 2017
+  url: "https://arxiv.org/abs/1706.03741"
+  grade: S1
+
+# ---------- 파트 4 ----------
+
+holtzman2019:
+  type: paper
+  title: "The Curious Case of Neural Text Degeneration (nucleus sampling)"
+  authors: "Holtzman, Buys, Du, Forbes & Choi"
+  year: 2019 # arXiv 2019-04, ICLR 2020 발표
+  url: "https://arxiv.org/abs/1904.09751"
+  grade: S1
+
+openai-api-docs:
+  type: docs
+  title: "OpenAI API Reference (샘플링 파라미터 등 공식 명세)"
+  authors: "OpenAI"
+  year: 2026 # 접속 확인 연도. developers.openai.com으로 리다이렉트됨(정상)
+  url: "https://platform.openai.com/docs/api-reference"
+  grade: S2
+
+liu2023:
+  type: paper
+  title: "Lost in the Middle: How Language Models Use Long Contexts"
+  authors: "Liu, Lin, Hewitt, Paranjape, Bevilacqua, Petroni & Liang"
+  year: 2023
+  url: "https://arxiv.org/abs/2307.03172"
+  grade: S1
+
+kwon2023:
+  type: paper
+  title: "Efficient Memory Management for Large Language Model Serving with PagedAttention (vLLM)"
+  authors: "Kwon et al."
+  year: 2023 # SOSP 2023
+  url: "https://arxiv.org/abs/2309.06180"
+  grade: S1
+
+ainslie2023:
+  type: paper
+  title: "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints"
+  authors: "Ainslie, Lee-Thorp, de Jong, Zemlyanskiy, Lebrón & Sanghai"
+  year: 2023
+  url: "https://arxiv.org/abs/2305.13245"
+  grade: S1
+
+pope2022:
+  type: paper
+  title: "Efficiently Scaling Transformer Inference"
+  authors: "Pope et al."
+  year: 2022
+  url: "https://arxiv.org/abs/2211.05102"
+  grade: S1
+
+ji2023:
+  type: paper
+  title: "Survey of Hallucination in Natural Language Generation"
+  authors: "Ji et al."
+  year: 2023 # arXiv 2022-02 제출, ACM Computing Surveys 2023 게재
+  url: "https://arxiv.org/abs/2202.03629"
+  grade: S1
+
+kadavath2022:
+  type: paper
+  title: "Language Models (Mostly) Know What They Know"
+  authors: "Kadavath et al."
+  year: 2022
+  url: "https://arxiv.org/abs/2207.05221"
+  grade: S1
+
+# ---------- 파트 5 ----------
+
+transformers-docs-memory:
+  type: docs
+  title: "Hugging Face Transformers — Model training anatomy (GPU 메모리 해부)"
+  authors: "Hugging Face"
+  year: 2026 # 접속 확인 연도
+  url: "https://huggingface.co/docs/transformers/model_memory_anatomy"
+  grade: S2
+
+dettmers2022:
+  type: paper
+  title: "LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale"
+  authors: "Dettmers, Lewis, Belkada & Zettlemoyer"
+  year: 2022 # NeurIPS 2022
+  url: "https://arxiv.org/abs/2208.07339"
+  grade: S1
+
+frantar2022:
+  type: paper
+  title: "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers"
+  authors: "Frantar, Ashkboos, Hoefler & Alistarh"
+  year: 2022 # arXiv 2022-10, ICLR 2023 발표
+  url: "https://arxiv.org/abs/2210.17323"
+  grade: S1
+
+lin2023:
+  type: paper
+  title: "AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration"
+  authors: "Lin et al."
+  year: 2023
+  url: "https://arxiv.org/abs/2306.00978"
+  grade: S1
+
+llamacpp-docs:
+  type: docs
+  title: "llama.cpp (공식 저장소 — GGUF·양자화 문서)"
+  authors: "ggml-org"
+  year: 2026 # 접속 확인 연도
+  url: "https://github.com/ggml-org/llama.cpp"
+  grade: S2
+
+hu2021:
+  type: paper
+  title: "LoRA: Low-Rank Adaptation of Large Language Models"
+  authors: "Hu et al."
+  year: 2021
+  url: "https://arxiv.org/abs/2106.09685"
+  grade: S1
+
+dettmers2023:
+  type: paper
+  title: "QLoRA: Efficient Finetuning of Quantized LLMs"
+  authors: "Dettmers, Pagnoni, Holtzman & Zettlemoyer"
+  year: 2023
+  url: "https://arxiv.org/abs/2305.14314"
+  grade: S1
+
+# ---------- 파트 6 ----------
+
+wei2022:
+  type: paper
+  title: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"
+  authors: "Wei et al."
+  year: 2022
+  url: "https://arxiv.org/abs/2201.11903"
+  grade: S1
+
+lewis2020:
+  type: paper
+  title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (RAG)"
+  authors: "Lewis et al."
+  year: 2020 # NeurIPS 2020
+  url: "https://arxiv.org/abs/2005.11401"
+  grade: S1
+
+karpukhin2020:
+  type: paper
+  title: "Dense Passage Retrieval for Open-Domain Question Answering (DPR)"
+  authors: "Karpukhin et al."
+  year: 2020 # EMNLP 2020
+  url: "https://arxiv.org/abs/2004.04906"
+  grade: S1
+
+yao2022:
+  type: paper
+  title: "ReAct: Synergizing Reasoning and Acting in Language Models"
+  authors: "Yao, Zhao, Yu, Du, Shafran, Narasimhan & Cao"
+  year: 2022 # arXiv 2022-10, ICLR 2023 발표
+  url: "https://arxiv.org/abs/2210.03629"
+  grade: S1
+
+schick2023:
+  type: paper
+  title: "Toolformer: Language Models Can Teach Themselves to Use Tools"
+  authors: "Schick et al."
+  year: 2023
+  url: "https://arxiv.org/abs/2302.04761"
+  grade: S1
+
+ollama-docs:
+  type: docs
+  title: "Ollama 공식 문서"
+  authors: "Ollama"
+  year: 2026 # 접속 확인 연도
+  url: "https://docs.ollama.com/"
+  grade: S2

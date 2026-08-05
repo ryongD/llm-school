@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "color-no-hex": [
+      true,
+      {
+        "message": "hex 직접 사용 금지 — src/styles/tokens.css의 CSS 변수를 쓰세요 (DESIGN §2)"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/styles/tokens.css"],
+      "rules": {
+        "color-no-hex": null
+      }
+    }
+  ]
+}
