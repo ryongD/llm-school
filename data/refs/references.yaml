@@ -95,8 +95,8 @@ hochreiter1997:
   title: "Long Short-Term Memory"
   authors: "Hochreiter & Schmidhuber"
   year: 1997 # Neural Computation 9(8) 1735-1780
-  # DOI가 direct.mit.edu의 해당 논문(9권 8호 1735-1780)으로 리졸브되는 것을 확인.
-  # 퍼블리셔 페이지는 봇 차단(403)이라 본문 열람은 미확인 — 재성 브라우저 1클릭 확인 권장.
+  # DOI 리졸브(해당 논문 경로) 기계 확인 + 퍼블리셔 페이지는 봇 차단이라
+  # 재성이 브라우저로 직접 열어 논문 페이지 표시를 확인함 (2026-08-05).
   url: "https://doi.org/10.1162/neco.1997.9.8.1735"
   grade: S1
 
