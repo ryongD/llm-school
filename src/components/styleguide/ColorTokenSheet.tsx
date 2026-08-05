@@ -20,6 +20,8 @@ const PAIRS: Pair[] = [
   { label: "본문", fgVar: "--ink-900", bgVar: "--bg-page", required: 4.5 },
   { label: "보조", fgVar: "--ink-600", bgVar: "--bg-page", required: 4.5 },
   { label: "캡션", fgVar: "--ink-400", bgVar: "--bg-page", required: 4.5 },
+  // 캡션의 최저 조건 — Depth 힌트 등 인셋 배경 위 사용처가 있다
+  { label: "캡션(인셋 위)", fgVar: "--ink-400", bgVar: "--bg-inset", required: 4.5 },
   { label: "링크", fgVar: "--jjok-600", bgVar: "--bg-page", required: 4.5 },
   { label: "칩 S1", fgVar: "--jjok-700", bgVar: "--jjok-100", required: 4.5 },
   { label: "판정 ok", fgVar: "--ok", bgVar: "--bg-page", required: 4.5 },
