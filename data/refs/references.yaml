@@ -72,6 +72,14 @@ edman2024:
   url: "https://arxiv.org/abs/2409.15452"
   grade: S1
 
+cosma2025:
+  type: paper
+  title: "The Strawberry Problem: Emergence of Character-level Understanding in Tokenized Language Models"
+  authors: "Cosma, Ruseti, Radoi & Dascalu"
+  year: 2025 # EMNLP 2025 구두 발표 — strawberry 글자 세기 실패의 원인(토큰화) 실증 (1-1 밈 서술 근거)
+  url: "https://arxiv.org/abs/2505.14172"
+  grade: S1
+
 jurafsky-slp3:
   type: docs
   title: "Speech and Language Processing (3rd ed. draft)"
