@@ -226,7 +226,7 @@ const chapter = s.object({
 | 컴포넌트 | 역할 | 규칙 |
 |---|---|---|
 | `<Widget id="..." />` | 위젯 삽입 | 챕터당 1회. frontmatter `widgetId`와 일치 검사 |
-| `<Depth level="dev">…</Depth>` | 개발자 레이어 (수식·PyTorch 코드) | 접힌 상태가 기본. 열림 상태는 URL 쿼리로 공유 가능하게 |
+| `<Depth level="dev">…</Depth>` | 개발자 레이어 (수식·PyTorch 코드) | 접힌 상태가 기본. 열림 상태는 URL 해시(#dev-1)로 공유 가능하게 (DESIGN §4.2와 정합 — 표기 정정 2026-08-06) |
 | `<Depth level="research">…</Depth>` | 연구 레이어 (원문 인용·논쟁 지점) | 원문 인용은 15단어 미만 + 출처 링크 필수 |
 | `<Term slug="...">softmax</Term>` | 용어사전 링크 | hover/tap 시 한 줄 정의 팝오버 + 상세 페이지 링크 |
 | `<CheckQuestion answer="...">…</CheckQuestion>` | 챕터 말미 확인 질문 1개 | 채점 없음 — 탭하면 답이 열리는 형태. 부담 최소화 |

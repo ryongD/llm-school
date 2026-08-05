@@ -212,10 +212,11 @@ for (const ch of chapterEntries) {
   }
 
   // <Widget> 임베드 — 챕터당 정확히 1회 + frontmatter 일치 (원칙 2, §4.2)
+  // draft는 집필 중 WIP 상태를 허용해 경고로 완화한다 (§4.5-2와 동일 정책, CP1 제안)
   const widgetTags = [...stripped.matchAll(WIDGET_TAG)];
   if (widgetTags.length !== 1) {
     report(
-      "error",
+      status === "draft" ? "warn" : "error",
       file,
       "widget-count",
       `<Widget> 임베드가 ${widgetTags.length}회 — 챕터당 정확히 1회여야 합니다(원칙 2).`,

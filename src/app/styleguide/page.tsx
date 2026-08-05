@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 import { CheckQuestion } from "@/components/mdx/CheckQuestion";
@@ -254,9 +254,9 @@ export default function StyleguidePage() {
               <line x1="10" y1="10" x2="70" y2="10" stroke="var(--attn-hue)" strokeWidth="1" opacity="0.15" />
               <line x1="10" y1="20" x2="70" y2="20" stroke="var(--attn-hue)" strokeWidth="2.5" opacity="0.55" />
               <line x1="10" y1="30" x2="70" y2="30" stroke="var(--attn-hue)" strokeWidth="4" opacity="1" />
-              <text x="80" y="14" fontSize="11" fill="var(--ink-600)">약</text>
-              <text x="80" y="24" fontSize="11" fill="var(--ink-600)">중</text>
-              <text x="80" y="34" fontSize="11" fill="var(--ink-600)">강</text>
+              <text x="80" y="14" fontSize="13" fill="var(--ink-600)">약</text>
+              <text x="80" y="24" fontSize="13" fill="var(--ink-600)">중</text>
+              <text x="80" y="34" fontSize="13" fill="var(--ink-600)">강</text>
             </svg>
           </div>
 

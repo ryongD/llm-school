@@ -54,7 +54,12 @@ export function Depth({
     if (next) {
       history.replaceState(null, "", `#${anchorId}`);
     } else if (window.location.hash === `#${anchorId}`) {
-      history.replaceState(null, "", window.location.pathname);
+      // 쿼리스트링은 보존하고 우리 해시만 제거한다 (CP1 제안)
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
     }
   }
 

@@ -13,8 +13,9 @@ export function Button({
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "ghost";
 }) {
+  // 시각 높이 40px, 터치 타깃은 ::after 확장으로 44px 확보 (DESIGN §4.10·§5.4)
   const base =
-    "inline-flex h-10 items-center justify-center rounded-ctl px-4 text-sm-token font-medium transition-colors duration-(--dur-micro) disabled:opacity-50";
+    "relative inline-flex h-10 items-center justify-center rounded-ctl px-4 text-sm-token font-medium transition-colors duration-(--dur-micro) disabled:opacity-50 after:absolute after:inset-x-0 after:-inset-y-0.5 after:content-['']";
   const styles =
     variant === "primary"
       ? "bg-jjok-600 text-sheet hover:bg-jjok-700"

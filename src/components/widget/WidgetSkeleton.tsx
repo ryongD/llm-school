@@ -8,6 +8,7 @@ import type { WidgetMeta } from "@/widgets/types";
 export function WidgetSkeleton({ meta }: { meta: WidgetMeta }) {
   return (
     <div
+      role="status"
       className="relative flex items-center justify-center"
       style={{ height: meta.heightPx }}
       aria-label={`${meta.title} 불러오는 중`}
