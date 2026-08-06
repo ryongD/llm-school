@@ -5,7 +5,7 @@ oneLiner: "자주 붙어 나오는 조각 쌍을 병합해 토큰 어휘를 만�
 relatedChapters: ["1-1"]
 references: ["sennrich2016", "radford2019"]
 lastVerified: "2026-08-06"
-status: draft
+status: verified
 ---
 
 BPE(Byte Pair Encoding)는 <Term slug="token">토큰</Term>의{" "}
@@ -21,6 +21,6 @@ Gage가 제안한 데이터 압축 기법이었는데, Sennrich 등(2016)이 기
 "초기 글자 수 + 병합 횟수"로 정해진다.
 
 바이트 수준 BPE는 이 알고리즘의 현대판으로, 글자 대신 UTF-8 바이트 256종에서
-시작한다 — GPT-2가 도입한 방식이다(Radford 2019). 덕분에 어휘에 없는 글자도
+시작한다 — GPT-2가 채택한 방식이다(Radford 2019). 덕분에 어휘에 없는 글자도
 바이트 조각으로 항상 처리할 수 있지만, 그 대가로 한글 같은 다바이트 문자가
 글자 중간에서 쪼개지기도 한다.
