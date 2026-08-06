@@ -36,6 +36,8 @@ describe("w-embedding-map 데이터 불변식", () => {
     const n = embeddingMap.words.length;
     expect(n).toBeGreaterThanOrEqual(500);
     expect(n).toBeLessThanOrEqual(1000);
+    // 1-3 본문 인용값: "한국어 단어 538개" — 데이터 재생성 시 본문도 갱신할 것
+    expect(n).toBe(538);
     for (const { x, y } of embeddingMap.words) {
       expect(x).toBeGreaterThanOrEqual(0);
       expect(x).toBeLessThanOrEqual(1);
@@ -69,11 +71,27 @@ describe("w-embedding-map 데이터 불변식", () => {
     expect(findAnalogy("아빠 − 남자 + 여자")!.top[0].w).toBe("엄마");
   });
 
-  it("스팟 — 파리−프랑스+한국은 서울이 top-3 안, 단 1위는 아님 (한계 사례)", () => {
+  it("스팟 — 파리−프랑스+한국: 뉴욕 1위·서울 2위, 표기 유사도 0.51 대 0.50 (1-3 본문 인용)", () => {
     const a = findAnalogy("파리 − 프랑스 + 한국")!;
-    const words = a.top.map((t) => t.w);
-    expect(words).toContain("서울");
-    expect(a.top[0].w).not.toBe("서울");
+    expect(a.top[0].w).toBe("뉴욕");
+    expect(a.top[1].w).toBe("서울");
+    // 본문 "0.51 대 0.50, 종이 한 장 차이" — 위젯 표기(소수 둘째 자리) 기준
+    expect(a.top[0].score.toFixed(2)).toBe("0.51");
+    expect(a.top[1].score.toFixed(2)).toBe("0.50");
+  });
+
+  it("스팟 — 왕−남자+여자는 여왕이 top-3에 없다 (1-3 본문 '절반만 됩니다' 근거)", () => {
+    const a = findAnalogy("왕 − 남자 + 여자");
+    expect(a).toBeDefined();
+    expect(a!.top.map((t) => t.w)).not.toContain("여왕");
+  });
+
+  it("스팟 — 여왕의 이웃은 왕비·왕 포함 (1-3 본문 '자리는 정상' 근거)", () => {
+    const q = findWordIndex("여왕");
+    expect(q).toBeGreaterThanOrEqual(0);
+    const nb = neighborsOf(q).map((i) => embeddingMap.words[i].w);
+    expect(nb).toContain("왕비");
+    expect(nb).toContain("왕");
   });
 
   it("스팟 — 이웃 품질: 서울↔부산, 슬픔↔기쁨 (원 공간 기준)", () => {
