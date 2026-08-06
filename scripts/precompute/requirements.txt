@@ -1,4 +1,4 @@
 # precompute 공통 의존성 (KICKOFF §8.3 — Python 3.11+, 재성 로컬 RTX 3080 실행)
 # CUDA 환경의 torch는 https://pytorch.org 안내에 따라 설치하는 것을 권장
 torch>=2.3
-transformers>=4.44
+transformers>=4.56

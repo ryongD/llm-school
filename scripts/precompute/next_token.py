@@ -18,9 +18,15 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
+import os
 from datetime import datetime, timezone
 from pathlib import Path
+
+# 이 스크립트는 torch만 쓴다. 같은 환경에 설치된 TensorFlow/Flax가 NumPy
+# 버전 충돌 등으로 깨져 있어도 transformers가 그걸 임포트하다 죽지 않도록
+# 명시적으로 끈다 (Anaconda 기본 환경에서 실제 발생 — 2026-08-06).
+os.environ.setdefault("USE_TF", "0")
+os.environ.setdefault("USE_FLAX", "0")
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -106,7 +112,7 @@ def main() -> None:
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
         revision=args.revision,
-        torch_dtype=torch.float16 if args.device == "cuda" else torch.float32,
+        dtype=torch.float16 if args.device == "cuda" else torch.float32,
     ).to(args.device)
     model.eval()
 
