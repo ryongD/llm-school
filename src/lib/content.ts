@@ -17,6 +17,14 @@ export function visibleChapters(): Chapter[] {
 }
 
 /** slug는 트랙 내에서만 유일하다(§13 URL 규칙, CP1 C5) — 반드시 track과 함께 조회 */
+/**
+ * 커리큘럼 맵에 노출할 챕터 — Phase 0 더미(0-0)는 제외한다.
+ * 더미 콘텐츠 삭제(Phase 1 DoD) 시 이 필터도 함께 제거할 것.
+ */
+export function curriculumChapters(): Chapter[] {
+  return visibleChapters().filter((c) => c.id !== "0-0");
+}
+
 export function findChapterBySlug(
   track: string,
   slug: string,
