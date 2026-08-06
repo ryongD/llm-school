@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { chapterMdxComponents } from "@/components/mdx";
 import { MDXContent } from "@/components/mdx/MDXContent";
+import { ChapterReadTracker } from "@/components/chapter/ChapterReadTracker";
 import { MiniToc } from "@/components/chapter/MiniToc";
 import { PartLabel } from "@/components/chapter/PartLabel";
 import { findChapterBySlug, findSitePage, visibleChapters } from "@/lib/content";
@@ -86,6 +87,9 @@ export default async function ChapterPage({ params }: { params: Params }) {
             components={chapterMdxComponents(chapter)}
           />
         </div>
+
+        {/* 완독 판정 — 본문 끝 도달 시 진도 기록 (localStorage) */}
+        <ChapterReadTracker chapterId={chapter.id} />
       </article>
 
       <MiniToc items={tocItems} />

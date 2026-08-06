@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { ContinueCard } from "@/components/home/ContinueCard";
+import { ReadStamp } from "@/components/home/ReadStamp";
 import { WidgetHost } from "@/components/widget/WidgetHost";
 import { WidgetSheet } from "@/components/widget/WidgetSheet";
 import { curriculumChapters, findSitePage } from "@/lib/content";
@@ -18,7 +20,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
   return (
     <Link
       href={chapter.permalink}
-      className="block rounded-card border border-hairline bg-sheet p-5 no-underline transition-colors duration-(--dur-micro) hover:bg-jjok-100"
+      className="relative block rounded-card border border-hairline bg-sheet p-5 no-underline transition-colors duration-(--dur-micro) hover:bg-jjok-100"
     >
       {/* 훅 질문이 카드 문구 — 마루 부리 17px (DESIGN §4.8) */}
       <span className="block font-display text-[17px] leading-relaxed text-ink-900">
@@ -27,6 +29,8 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
       <span className="mt-2 block text-caption text-ink-600">
         {chapter.id} · {chapter.title}
       </span>
+      {/* 완독 시 우상단 인주 스탬프 (§1.2) */}
+      <ReadStamp chapterId={chapter.id} />
     </Link>
   );
 }
@@ -41,6 +45,15 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12">
+      {/* ===== 이어가기 카드 (§6.2-1) — 재방문자 전용, 히어로보다 위 ===== */}
+      <ContinueCard
+        chapters={chapters.map((c) => ({
+          id: c.id,
+          title: c.title,
+          permalink: c.permalink,
+        }))}
+      />
+
       {/* ===== 히어로 — 논지 + 시연 (§6.2-2) ===== */}
       <section>
         {/* 사용자 어휘로 앵커링 — 'LLM'으로 시작하면 첫 단어에서 막힌다 */}
