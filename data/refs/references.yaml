@@ -88,6 +88,14 @@ jurafsky-slp3:
   url: "https://web.stanford.edu/~jurafsky/slp3/"
   grade: S2
 
+fasttext-vectors:
+  type: docs
+  title: "fastText — Word vectors for 157 languages (crawl-vectors, 한국어 cc.ko.300)"
+  authors: "Facebook AI Research (Grave et al.)"
+  year: 2026 # 접속 확인 연도 (배포 페이지). 벡터 라이선스 CC-BY-SA 3.0 페이지 명기 확인
+  url: "https://fasttext.cc/docs/en/crawl-vectors.html"
+  grade: S2
+
 # ---------- 파트 2 ----------
 
 vaswani2017:
