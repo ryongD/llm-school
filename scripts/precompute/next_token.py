@@ -5,10 +5,10 @@
 실제 다음 토큰(및 그 순위)을 기록한다. 샘플링이 없는 결정적 연산이라
 같은 모델·리비전이면 재현된다(§8.3 — 시드는 메타 기록용).
 
-사용법 (Python 3.11+):
-    pip install -r requirements.txt
-    python next_token.py --model EleutherAI/polyglot-ko-1.3b \
-        --out ../../data/traces/next-token/
+사용법 — 전용 가상환경 권장(requirements.txt 상단 안내 참조):
+    .venv-precompute/Scripts/pip install -r scripts/precompute/requirements.txt
+    .venv-precompute/Scripts/python scripts/precompute/next_token.py \
+        --model EleutherAI/polyglot-ko-1.3b --out data/traces/next-token/
 
 산출: {out}/{모델 짧은 이름}.json — 최상단 _meta에 모델명·리비전·스크립트·
 생성일·시드 포함(위젯 캡션에 노출됨, §3.3).

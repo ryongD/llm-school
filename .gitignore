@@ -10,6 +10,11 @@ next-env.d.ts
 /.velite/
 /public/static/
 
+# precompute 전용 가상환경·대용량 소스 데이터 (산출 JSON만 커밋한다 — §8.3)
+/.venv-precompute/
+*.vec.gz
+*.vec
+
 # testing
 /coverage/
 
