@@ -12,6 +12,7 @@ import type { ComponentType } from "react";
 
 import { WidgetSkeleton } from "@/components/widget/WidgetSkeleton";
 import { meta as dummyCounterMeta } from "./dummy-counter/meta";
+import { meta as nextTokenMeta } from "./next-token/meta";
 import { meta as tokenizerMeta } from "./tokenizer/meta";
 import type { WidgetMeta, WidgetProps } from "./types";
 
@@ -31,6 +32,12 @@ export const widgetRegistry: Record<string, RegistryEntry> = {
     meta: tokenizerMeta,
     Component: dynamic(() => import("./tokenizer"), {
       loading: () => <WidgetSkeleton meta={tokenizerMeta} />,
+    }),
+  },
+  [nextTokenMeta.id]: {
+    meta: nextTokenMeta,
+    Component: dynamic(() => import("./next-token"), {
+      loading: () => <WidgetSkeleton meta={nextTokenMeta} />,
     }),
   },
 };
