@@ -1,0 +1,25 @@
+---
+slug: language-model
+term: "언어모델 (language model)"
+oneLiner: "지금까지의 조각들을 보고 다음 조각의 확률을 계산하는 모델."
+relatedChapters: ["1-2"]
+references: ["bengio2003", "radford2019"]
+lastVerified: "2026-08-06"
+status: draft
+---
+
+언어모델은 <Term slug="token">토큰</Term> 시퀀스에 확률을 부여하는 모델이다.
+통계적 언어모델링의 목표는 언어에서 단어(조각) 시퀀스의 결합 확률을 배우는
+것이고(Bengio 2003), 실제로는 이것을 "지금까지의 조각들이 주어졌을 때 다음
+조각이 무엇일 확률"이라는 조건부 확률들의 곱으로 분해해 다룬다(Radford
+2019). 그래서 언어모델을 굴린다는 것은 곧, 각 위치에서 다음 조각의{" "}
+<Term slug="probability-distribution">확률 분포</Term>를 계산한다는 뜻이다.
+
+GPT 계열의 LLM은 이 정의 그대로의 언어모델이다. 대화·번역·코딩처럼 보이는
+능력들은 전부 이 "다음 조각 확률" 출력 하나에서 나오며, 긴 답변은 뽑은
+조각을 다시 입력에 붙여 반복하는 <Term slug="autoregressive">자기회귀</Term>
+방식으로 만들어진다.
+
+초기 언어모델은 짧은 조각 통계(n-gram)에 의존했으나, 신경망으로 단어의
+분산 표현을 학습해 확률을 계산하는 접근(Bengio 2003)이 등장하며 오늘의
+LLM으로 이어지는 계보가 시작됐다.

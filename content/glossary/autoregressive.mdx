@@ -1,0 +1,23 @@
+---
+slug: autoregressive
+term: "자기회귀 (autoregressive)"
+oneLiner: "방금 뽑은 조각을 입력 끝에 붙이고 다시 예측하는 생성 방식."
+relatedChapters: ["1-2"]
+references: ["radford2019"]
+lastVerified: "2026-08-06"
+status: draft
+---
+
+자기회귀는 <Term slug="language-model">언어모델</Term>이 긴 글을 만들어내는
+방식이다. 모델은 한 번에 다음 <Term slug="token">토큰</Term> 하나의{" "}
+<Term slug="probability-distribution">확률 분포</Term>만 내놓는다. 거기서
+조각 하나를 고르면, 그 조각을 입력의 끝에 붙이고 다시 다음 조각을 예측한다.
+이 루프를 반복한 결과가 문장이고 답변이다.
+
+이름의 뜻 그대로 "자기(방금 만든 출력)에로 회귀(되돌아가 입력이 됨)"하는
+구조다. 수식으로는 시퀀스 전체의 확률을 각 위치의 조건부 확률의 곱으로
+분해하는 것에 해당하며, GPT 계열이 이 방식으로 학습되고 생성한다(Radford
+2019).
+
+챕터 1-2의 위젯에서 ◀ ▶ 스테퍼로 한 칸씩 진행하는 것이 바로 이 루프를
+천천히 재생하는 일이다 — 실제 모델은 같은 일을 토큰마다 반복할 뿐이다.
