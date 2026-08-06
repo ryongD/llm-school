@@ -24,6 +24,9 @@ next-env.d.ts
 npm-debug.log*
 .env*
 
+# 로컬 에이전트/에디터 설정
+/.claude/
+
 # vercel
 .vercel
 

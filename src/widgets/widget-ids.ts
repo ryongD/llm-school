@@ -4,11 +4,17 @@
  * 새 위젯 추가 시: 폴더 생성 → meta.ts 작성 → 여기와 registry.tsx 두 곳에 등록.
  */
 import { meta as dummyCounter } from "./dummy-counter/meta";
+import { meta as embeddingMap } from "./embedding-map/meta";
 import { meta as nextToken } from "./next-token/meta";
 import { meta as tokenizer } from "./tokenizer/meta";
 import type { WidgetMeta } from "./types";
 
-export const widgetMetas: WidgetMeta[] = [dummyCounter, tokenizer, nextToken];
+export const widgetMetas: WidgetMeta[] = [
+  dummyCounter,
+  tokenizer,
+  nextToken,
+  embeddingMap,
+];
 
 export const widgetIds: string[] = widgetMetas.map((m) => m.id);
 
