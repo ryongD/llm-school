@@ -19,6 +19,8 @@ export interface AnalogyResult {
   top: { w: string; score: number }[];
   filter?: string;
   note?: string;
+  /** 기대 답의 실제 순위 기록 (본문 인용 잠금용 — 예: 왕 유추의 여왕 7위) */
+  probe?: { w: string; rank: number; score: number };
 }
 
 export interface MapMeta {

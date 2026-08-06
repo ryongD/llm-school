@@ -128,6 +128,10 @@ ANALOGIES: list[tuple[str, str, str]] = [
     ("파리", "프랑스", "한국"),
 ]
 
+# 프로브 — 본문이 인용하는 "기대 답의 실제 순위"를 데이터에 기록해 골든으로
+# 잠글 수 있게 한다 (§11.2-4). 키는 유추의 첫 항.
+PROBES: dict[str, str] = {"왕": "여왕"}
+
 # 지도 어휘 = 시드 전량 (빈도 보충은 쓰지 않는다 — 상위 빈도 한글 토큰은
 # "있다/위해/같은" 류 기능어·곡용형이 지배해 지도를 오염시킴을 1차 실행에서
 # 확인. §8.2.3의 500~1,000 하한은 시드 카테고리 확장으로 충족한다)
@@ -207,11 +211,14 @@ def main() -> None:
     np.fill_diagonal(sims, -1.0)
     neighbor_idx = np.argsort(-sims, axis=1)[:, :NEIGHBORS_K].tolist()
 
-    # 유추 — 원 공간, 전체 풀 기준. 질의 단어와 그 변형형(질의어를 포함하거나
-    # 질의어에 포함되는 후보 — '왕'→'왕과', '형'→'형의' 같은 곡용형)은 제외한다.
-    # 한국어 조사·어미 부착형이 상위를 오염시키는 것을 막는 실용 필터.
+    # 유추 — 원 공간, 전체 풀 기준. 질의 단어 자신과 질의 단어로 시작하는
+    # 형태('왕과'·'형의' 같은 조사 부착형, '왕비' 같은 합성어 포함)만 제외한다.
+    # 주의: 이전의 양방향 부분문자열 검사(t in cand or cand in t)는 '여왕'·
+    # '국왕'처럼 질의어를 품은 별개 단어까지 지워 유추 결과를 관측 불능으로
+    # 만들었다(CP2 치명 지적, 2026-08-07 정정). SLP3가 말하는 제외 대상은
+    # "입력 단어와 그 형태 변형"이며, 접두 일치는 그 한국어 근사다.
     def is_variant(cand: str, terms: tuple[str, str, str]) -> bool:
-        return any(t in cand or cand in t for t in terms)
+        return any(cand == t or cand.startswith(t) for t in terms)
 
     analogies = []
     for a, b, c in ANALOGIES:
@@ -228,13 +235,29 @@ def main() -> None:
             top.append(int(i))
             if len(top) == 3:
                 break
-        analogies.append({
+        entry = {
             "expr": f"{a} − {b} + {c}",
             "terms": [a, b, c],
             "top": [{"w": pool_words[i], "score": round(float(scores[i]), 4)} for i in top],
-            "filter": "질의 단어의 변형형 제외 (원 공간 계산)",
-        })
-        print(f"[embedding_map] {a} − {b} + {c} = {[pool_words[i] for i in top]}")
+            "filter": "질의 단어와 그로 시작하는 형태 제외 (원 공간 계산)",
+        }
+        probe_word = PROBES.get(a)
+        if probe_word and probe_word in pool_index:
+            rank = 0
+            for i in np.argsort(-scores):
+                if is_variant(pool_words[i], (a, b, c)):
+                    continue
+                rank += 1
+                if pool_words[i] == probe_word:
+                    entry["probe"] = {
+                        "w": probe_word,
+                        "rank": rank,
+                        "score": round(float(scores[pool_index[probe_word]]), 4),
+                    }
+                    break
+        analogies.append(entry)
+        print(f"[embedding_map] {a} − {b} + {c} = {[pool_words[i] for i in top]}"
+              + (f" | probe {entry['probe']}" if "probe" in entry else ""))
 
     # UMAP 2D (시드 고정)
     import umap  # noqa: PLC0415 — 무거운 임포트는 사용 직전에

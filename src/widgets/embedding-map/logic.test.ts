@@ -17,9 +17,10 @@ import {
  * 데이터 구조 불변식 + 본문·위젯이 인용하는 실측 성질을 잠근다.
  *
  * 정답값 근거(§11.2-4): 데이터는 FastText cc.ko.300에서
- * scripts/precompute/embedding_map.py로 2026-08-06 생성한 실측이다(_meta).
- * 스팟 성질(도쿄·엄마 1위, 파리→서울 2위, 서울-부산 이웃)은 생성 직후
- * 검수에서 채록했다 — SPEC-1-3 v2의 버튼 채택 근거와 동일.
+ * scripts/precompute/embedding_map.py로 생성한 실측이다(_meta).
+ * 2026-08-07 필터 정정 재생성: 변형형 필터를 접두 일치로 고쳐 '여왕'이
+ * 관측 가능해짐(CP2 치명 지적) — 왕 유추는 국왕 1위·여왕 7위(probe)로
+ * 실패 결론 유지, 채택 3건(도쿄·엄마·파리)은 불변임을 재확인했다.
  */
 
 describe("w-embedding-map 데이터 불변식", () => {
@@ -80,10 +81,13 @@ describe("w-embedding-map 데이터 불변식", () => {
     expect(a.top[1].score.toFixed(2)).toBe("0.50");
   });
 
-  it("스팟 — 왕−남자+여자는 여왕이 top-3에 없다 (1-3 본문 '절반만 됩니다' 근거)", () => {
-    const a = findAnalogy("왕 − 남자 + 여자");
-    expect(a).toBeDefined();
-    expect(a!.top.map((t) => t.w)).not.toContain("여왕");
+  it("스팟 — 왕−남자+여자: 국왕 1위, 여왕은 7위 (1-3 본문 인용 — 필터 정정 후)", () => {
+    const a = findAnalogy("왕 − 남자 + 여자")!;
+    expect(a.top[0].w).toBe("국왕");
+    expect(a.top.map((t) => t.w)).not.toContain("여왕");
+    expect(a.probe).toBeDefined();
+    expect(a.probe!.w).toBe("여왕");
+    expect(a.probe!.rank).toBe(7);
   });
 
   it("스팟 — 여왕의 이웃은 왕비·왕 포함 (1-3 본문 '자리는 정상' 근거)", () => {
