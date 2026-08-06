@@ -67,6 +67,14 @@ describe("w-next-token 트레이스 불변식", () => {
     expect(step.actual.rank).toBeGreaterThan(DISPLAY_TOP_N);
     expect(actualInTopN(step)).toBe(false);
   });
+
+  it("스팟 값 — '오늘' 다음의 ' 점심'도 top-5 밖 (1-2 본문이 직접 인용, CP2 반영)", () => {
+    // 본문 서술 "실제로 이어진 ' 점심'은 상위권에 없었습니다"의 앵커.
+    // 트레이스 재생성으로 이 성질이 깨지면 본문도 함께 고쳐야 한다(§11.2-4).
+    const step = trace.sentences[0].steps[0];
+    expect(step.actual.token).toBe(" 점심");
+    expect(actualInTopN(step)).toBe(false);
+  });
 });
 
 describe("w-next-token 수식", () => {

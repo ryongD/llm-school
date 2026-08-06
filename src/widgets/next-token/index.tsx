@@ -85,7 +85,6 @@ export default function NextTokenWidget() {
   }
 
   const topN = step.topk.slice(0, DISPLAY_TOP_N);
-  const maxProb = probOf(topN[0].logprob);
   const actualOutside = !actualInTopN(step);
 
   const summary = useMemo(() => {
@@ -204,11 +203,13 @@ export default function NextTokenWidget() {
                 <span className="min-w-16 rounded-ctl bg-inset px-1.5 py-0.5 text-center font-mono text-sm-token whitespace-pre text-ink-900">
                   {displayToken(t.token)}
                 </span>
+                {/* 절대 확률 스케일 — 쏠린 스텝과 팽팽한 스텝의 막대 길이가
+                    실제로 다르게 보여야 조작 가이드 1이 성립한다 (CP2 반영) */}
                 <div className="h-4 flex-1 rounded-ctl" style={{ backgroundColor: "var(--bar-track)" }}>
                   <div
                     className="h-full rounded-ctl"
                     style={{
-                      width: `${(probOf(t.logprob) / maxProb) * 100}%`,
+                      width: `${probOf(t.logprob) * 100}%`,
                       backgroundColor: "var(--bar-fill)",
                     }}
                   />
@@ -245,11 +246,17 @@ export default function NextTokenWidget() {
         </p>
       ) : null}
 
-      {/* 정직 캡션 + 생성 메타 (§8.2.2·§3.3) */}
-      <div className="mt-auto border-t border-hairline pt-2">
+      {/* 정직 캡션 + 생성 메타 전체 노출 (§8.2.2·§3.3, SPEC-1-2) */}
+      <div className="mt-auto flex flex-col gap-1 border-t border-hairline pt-2">
         <p className="text-caption text-ink-400">
-          소형 모델({trace._meta.model})의 실제 예측입니다 — 어설픈 지점도
-          그대로 보여줍니다. 트레이스 생성 {trace._meta.generatedAt}.
+          왜 정해진 문장만 있나요? — 실제 모델의 예측을 미리 계산해 담아 두고
+          재생하는 방식이라서입니다.
+        </p>
+        <p className="text-caption text-ink-400">
+          소형 모델의 실제 예측입니다 — 어설픈 지점도 그대로 보여줍니다.{" "}
+          {trace._meta.model}@{trace._meta.revision} ·{" "}
+          {trace._meta.script.split("/").pop()} · seed {trace._meta.seed} ·{" "}
+          {trace._meta.generatedAt} 생성.
         </p>
       </div>
     </div>
