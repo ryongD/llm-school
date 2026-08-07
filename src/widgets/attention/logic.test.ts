@@ -3,7 +3,10 @@ import { describe, expect, it } from "vitest";
 import traceJson from "../../../data/traces/attention/polyglot-ko-1.3b.json";
 import {
   AttentionTrace,
+  classifyLink,
   CURATED_VIEW,
+  distinctTargetCount,
+  headAnswers,
   HEAD_MEAN,
   summarize,
   weightsFor,
@@ -112,5 +115,47 @@ describe("w-attention 데이터 불변식", () => {
     expect(text).toContain("타고");
     expect(text).toContain("배");
     expect(text).toContain("94%");
+  });
+});
+
+/**
+ * 헤드 비교 모드 (SPEC-2-2). 실측 근거: 2026-08-07 트레이스 전수 분석 —
+ * L2 헤드1은 '바로 앞'만 보는 인접성 헤드(q≥2 적중 75/83 = 90%)이고,
+ * 층이 깊어질수록 헤드들의 답이 첫 토큰으로 수렴한다.
+ */
+describe("w-attention 헤드 비교 (2-2 확장 모드)", () => {
+  it("classifyLink — 자기·앞·첫·내용, 그리고 앞·첫 중의(q=1)", () => {
+    expect(classifyLink(5, 5)).toBe("self");
+    expect(classifyLink(5, 4)).toBe("prev");
+    expect(classifyLink(5, 0)).toBe("first");
+    expect(classifyLink(5, 2)).toBe("content");
+    // 질의가 1번이면 '바로 앞'과 '첫 토큰'이 같은 자리 — 중의로 표시해야
+    // 싱크 헤드를 인접성 헤드로 오독하지 않는다
+    expect(classifyLink(1, 0)).toBe("prevFirst");
+  });
+
+  it("headAnswers — 헤드 수만큼, 평균은 제외", () => {
+    const s = trace.sentences[0];
+    const answers = headAnswers(s, 2, 9, trace._meta.headsTotal);
+    expect(answers).toHaveLength(16);
+    expect(answers.every((a) => a.head < HEAD_MEAN)).toBe(true);
+  });
+
+  it("스팟 — L2 헤드1은 인접성 헤드: 훅 문장 q=1..11에서 전부 '바로 앞'", () => {
+    const s = trace.sentences[0];
+    for (let q = 1; q <= 11; q++) {
+      const pairs = weightsFor(s, 2, 1, q);
+      expect(pairs[0][0], `q=${q}`).toBe(q - 1);
+    }
+  });
+
+  it("스팟 — 다양성: L2 '타고'는 5종, L17에서는 1종으로 붕괴", () => {
+    const s = trace.sentences[0];
+    const early = headAnswers(s, 2, 4, trace._meta.headsTotal);
+    const late = headAnswers(s, 17, 4, trace._meta.headsTotal);
+    expect(distinctTargetCount(early)).toBe(5);
+    expect(distinctTargetCount(late)).toBe(1);
+    // 붕괴한 층의 유일한 답은 첫 토큰(싱크)
+    expect(late[0].target).toBe(0);
   });
 });

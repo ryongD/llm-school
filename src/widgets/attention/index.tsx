@@ -6,18 +6,23 @@ import { loadTrace } from "./data";
 import {
   AttentionTrace,
   CURATED_VIEW,
+  distinctTargetCount,
+  headAnswers,
   headLabel,
+  linkLabel,
   summarize,
   weightsFor,
 } from "./logic";
 
 /**
- * w-attention UI (SPEC-2-1, DESIGN §5).
- * - 문장 선택 → 토큰 탭(질의) → 그 토큰이 앞 토큰들을 쳐다보는 세기를
+ * w-attention UI (SPEC-2-1 단일 보기 + SPEC-2-2 헤드 비교, DESIGN §5).
+ * - 단일 보기: 토큰 탭(질의) → 그 토큰이 앞 토큰들을 쳐다보는 세기를
  *   아크(선 굵기·농도)와 대상 칩 강조로 표시
+ * - 헤드 비교(2-2 확장 모드): 같은 질의에 대한 16개 헤드의 답을 카드로
+ *   나란히 놓고 성격 배지·다양성 카운터를 보여준다. 카드 클릭 → 단일 보기
  * - 층·헤드 셀렉터(+헤드 평균 — 첫 토큰 쏠림을 숨기지 않는다)
  * - 기본 진입은 추천 보기(L2·H15의 '타고'→'배') — 노이즈 첫인상 방지
- * - 키보드 경로: 토큰이 전부 버튼, 셀렉터는 네이티브 select (§8)
+ * - 키보드 경로: 토큰·헤드 카드가 전부 버튼, 셀렉터는 네이티브 select (§8)
  */
 
 interface ArcSpec {
@@ -28,6 +33,7 @@ interface ArcSpec {
 
 export default function AttentionWidget() {
   const [trace, setTrace] = useState<AttentionTrace | null>(null);
+  const [mode, setMode] = useState<"single" | "grid">("single");
   const [sentenceIdx, setSentenceIdx] = useState(CURATED_VIEW.sentence);
   const [layer, setLayer] = useState(CURATED_VIEW.layer);
   const [head, setHead] = useState(CURATED_VIEW.head);
@@ -62,12 +68,26 @@ export default function AttentionWidget() {
     return map;
   }, [pairs]);
 
+  // 헤드 비교 모드용 — 같은 질의에 대한 헤드 16개의 답 (SPEC-2-2)
+  const answers = useMemo(
+    () =>
+      query === null || !sentence || !trace
+        ? []
+        : headAnswers(sentence, layer, query, trace._meta.headsTotal),
+    [sentence, trace, layer, query],
+  );
+  const distinctCount = useMemo(
+    () => distinctTargetCount(answers),
+    [answers],
+  );
+
   function selectSentence(idx: number) {
     setSentenceIdx(idx);
     setQuery(null);
   }
 
   function applyCurated() {
+    setMode("single");
     setSentenceIdx(CURATED_VIEW.sentence);
     setLayer(CURATED_VIEW.layer);
     setHead(CURATED_VIEW.head);
@@ -77,7 +97,8 @@ export default function AttentionWidget() {
   // 아크 좌표 — 토큰 칩 중심을 측정해 SVG 곡선으로 (스크롤 컨테이너 내부 기준)
   const measure = useCallback(() => {
     const strip = stripRef.current;
-    if (!strip || query === null) {
+    // 그리드 모드의 아크는 헤드 하나를 전제하지 않으므로 그리지 않는다
+    if (!strip || query === null || mode === "grid") {
       setArcs([]);
       setStripWidth(stripRef.current?.scrollWidth ?? 0);
       return;
@@ -99,7 +120,7 @@ export default function AttentionWidget() {
     }
     setArcs(next);
     setStripWidth(strip.scrollWidth);
-  }, [query, pairs]);
+  }, [query, pairs, mode]);
 
   useEffect(() => {
     measure();
@@ -156,20 +177,44 @@ export default function AttentionWidget() {
             ))}
           </select>
         </label>
-        <label className="flex items-center gap-1.5 text-caption text-ink-600">
-          헤드
-          <select
-            value={head}
-            onChange={(e) => setHead(Number(e.target.value))}
-            className="rounded-ctl border border-hairline-strong bg-inset px-2 py-1.5 text-sm-token text-ink-900"
-          >
-            {Array.from({ length: trace._meta.headsTotal + 1 }, (_, h) => (
-              <option key={h} value={h}>
-                {headLabel(h)}
-              </option>
-            ))}
-          </select>
-        </label>
+        {mode === "single" ? (
+          <label className="flex items-center gap-1.5 text-caption text-ink-600">
+            헤드
+            <select
+              value={head}
+              onChange={(e) => setHead(Number(e.target.value))}
+              className="rounded-ctl border border-hairline-strong bg-inset px-2 py-1.5 text-sm-token text-ink-900"
+            >
+              {Array.from({ length: trace._meta.headsTotal + 1 }, (_, h) => (
+                <option key={h} value={h}>
+                  {headLabel(h)}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        {/* 모드 전환 — 2-2 확장 모드 진입점 (SPEC-2-2) */}
+        <div
+          role="group"
+          aria-label="보기 모드"
+          className="flex overflow-hidden rounded-ctl border border-hairline-strong"
+        >
+          {(["single", "grid"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setMode(m)}
+              aria-pressed={mode === m}
+              className={`px-2.5 py-1.5 text-caption font-medium transition-colors duration-(--dur-micro) ${
+                mode === m
+                  ? "bg-jjok-100 text-jjok-700"
+                  : "text-ink-600 hover:bg-inset"
+              }`}
+            >
+              {m === "single" ? "단일 보기" : "헤드 비교"}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onClick={applyCurated}
@@ -253,8 +298,64 @@ export default function AttentionWidget() {
         </div>
       </div>
 
+      {/* 헤드 비교 그리드 (SPEC-2-2 확장 모드) */}
+      {mode === "grid" ? (
+        query === null ? (
+          <p className="rounded-ctl bg-inset px-3 py-6 text-center text-caption text-ink-400">
+            토큰을 하나 고르면, 그 자리를 헤드 {trace._meta.headsTotal}개가
+            각각 어떻게 읽는지 한눈에 비교합니다.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <p className="text-caption text-ink-600" role="status">
+              {layer}층에서 헤드 {trace._meta.headsTotal}개가 "
+              {sentence.tokens[query].trim()}"의 상대로 지목한 곳은{" "}
+              <span className="font-semibold text-ink-900">
+                서로 다른 {distinctCount}종
+              </span>
+              입니다
+              {distinctCount <= 2
+                ? " — 이 층에서는 헤드들이 사실상 같은 답을 냅니다."
+                : "."}
+            </p>
+            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+              {answers.map((a) => (
+                <button
+                  key={a.head}
+                  type="button"
+                  onClick={() => {
+                    setHead(a.head);
+                    setMode("single");
+                  }}
+                  aria-label={`헤드 ${a.head} — "${sentence.tokens[a.target].trim()}" ${a.weight}%, ${linkLabel(a.kind)}. 단일 보기로 열기`}
+                  className="flex flex-col gap-1 rounded-ctl border border-hairline bg-inset px-2 py-1.5 text-left transition-colors duration-(--dur-micro) hover:border-jjok-400"
+                >
+                  <span className="flex items-baseline justify-between gap-1">
+                    <span className="text-caption text-ink-400">
+                      헤드 {a.head}
+                    </span>
+                    <span className="text-caption text-ink-400">
+                      {linkLabel(a.kind)}
+                    </span>
+                  </span>
+                  <span className="flex items-baseline gap-1.5">
+                    <span className="truncate font-mono text-sm-token text-ink-900">
+                      {sentence.tokens[a.target].trim() ||
+                        sentence.tokens[a.target]}
+                    </span>
+                    <span className="text-caption text-ink-600 tabular">
+                      {a.weight}%
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )
+      ) : null}
+
       {/* 시각화 요약 (DESIGN §8) */}
-      {query !== null ? (
+      {mode === "grid" ? null : query !== null ? (
         <p className="text-caption text-ink-600" role="status">
           {summary}
         </p>
