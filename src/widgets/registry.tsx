@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
 
 import { WidgetSkeleton } from "@/components/widget/WidgetSkeleton";
+import { meta as attentionMeta } from "./attention/meta";
 import { meta as dummyCounterMeta } from "./dummy-counter/meta";
 import { meta as embeddingMapMeta } from "./embedding-map/meta";
 import { meta as nextTokenMeta } from "./next-token/meta";
@@ -45,6 +46,12 @@ export const widgetRegistry: Record<string, RegistryEntry> = {
     meta: embeddingMapMeta,
     Component: dynamic(() => import("./embedding-map"), {
       loading: () => <WidgetSkeleton meta={embeddingMapMeta} />,
+    }),
+  },
+  [attentionMeta.id]: {
+    meta: attentionMeta,
+    Component: dynamic(() => import("./attention"), {
+      loading: () => <WidgetSkeleton meta={attentionMeta} />,
     }),
   },
 };

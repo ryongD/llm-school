@@ -92,25 +92,28 @@ def inspect(tokenizer, model, device: str) -> None:
 
 
 def build_trace(tokenizer, model, device: str, layers: list[int]) -> dict:
+    def rows_from(matrix, seq: int) -> list:
+        """행별 top-k를 [대상 인덱스, 가중치×100] 쌍으로 압축 (§3.5)"""
+        rows = []
+        for q in range(seq):
+            w = matrix[q, : q + 1]
+            k = min(TOP_K, q + 1)
+            top = torch.topk(w, k)
+            rows.append(
+                [[int(j), int(round(float(w[j]) * 100))]
+                 for j in top.indices.tolist()]
+            )
+        return rows
+
     sentences = []
     for text in SENTENCES:
         tokens, attn = sentence_attentions(tokenizer, model, device, text)
         seq = len(tokens)
         per_layer = {}
         for layer in layers:
-            heads = []
-            for h in range(attn.shape[1]):
-                rows = []
-                for q in range(seq):
-                    w = attn[layer, h, q, : q + 1]
-                    k = min(TOP_K, q + 1)
-                    top = torch.topk(w, k)
-                    # [대상 인덱스, 가중치×100 반올림] 쌍 — 용량 절약(§3.5)
-                    rows.append(
-                        [[int(j), int(round(float(w[j]) * 100))]
-                         for j in top.indices.tolist()]
-                    )
-                heads.append(rows)
+            heads = [rows_from(attn[layer, h], seq) for h in range(attn.shape[1])]
+            # 마지막 인덱스 = 헤드 평균 — 첫 토큰 쏠림(싱크) 관찰용(SPEC-2-1)
+            heads.append(rows_from(attn[layer].mean(dim=0), seq))
             per_layer[str(layer)] = heads
         sentences.append({"text": text, "tokens": tokens, "layers": per_layer})
 
@@ -126,6 +129,7 @@ def build_trace(tokenizer, model, device: str, layers: list[int]) -> dict:
             "layersStored": layers,
             "layersTotal": num_layers,
             "headsTotal": num_heads,
+            "headsStored": f"{num_heads}개 헤드 + 평균(마지막 인덱스)",
             "topK": TOP_K,
             "weightScale": "정수 0~100 (가중치 ×100 반올림)",
         },
