@@ -5,8 +5,10 @@
 #   python -m venv .venv-precompute
 #   .venv-precompute/Scripts/pip install -r scripts/precompute/requirements.txt
 #
-# CUDA torch는 https://pytorch.org 안내대로 설치 권장 (next_token.py 전용 —
-# embedding_map.py만 쓸 경우 numpy·umap-learn만 있으면 된다)
+# CUDA torch는 https://pytorch.org 안내대로 설치 권장 (next_token.py·
+# attention_trace.py). CPU 휠(--index-url https://download.pytorch.org/whl/cpu)
+# 로도 동작한다 — 1.3b 모델의 짧은 문장 트레이스는 CPU로 충분(2026-08-07 확인).
+# embedding_map.py만 쓸 경우 numpy·umap-learn만 있으면 된다.
 torch>=2.3
 transformers>=4.56
 numpy>=2
