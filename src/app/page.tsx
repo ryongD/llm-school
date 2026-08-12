@@ -62,18 +62,19 @@ export default function HomePage() {
         <h1 className="font-display text-display leading-snug font-bold text-ink-900">
           ChatGPT는 속으로
           <br />
-          무슨 일을 할까?
+          무슨 생각을 할까?
         </h1>
+        {/* 훅이 부른 통념('생각')을 바로 다음 문장이 받아친다 — 의인화를
+            사실로 깔지 않으면서 궁금증은 살린다 (KICKOFF §11.3) */}
         <p className="mt-4 text-body text-ink-600">
-          ChatGPT 같은 AI를 LLM(대형 언어모델)이라고 부릅니다. 이 사이트는 그
-          안에서 무슨 일이 벌어지는지 글로 설명하는 대신,{" "}
-          <span className="text-ink-900">직접 만져보며 확인하는 곳</span>
-          입니다. 수학도 코딩도 필요 없습니다.
+          열어보면 <span className="text-ink-900">생각보다 단순한 계산</span>이
+          돌아갑니다. 여기서는 그걸 글로 설명하지 않습니다. 직접 만져보면서
+          확인합니다. 수학도 코딩도 몰라도 됩니다.
         </p>
 
         {/* 설명 대신 시연이 첫인상 — 단, 무엇의 시연인지 한 줄 먼저 (§6.2-2) */}
         <p className="mt-6 text-sm-token text-ink-600">
-          예를 들어 AI는 글을 이런 조각으로 잘라서 읽습니다 — 아무 말이나
+          예를 들어 AI는 글을 이런 조각으로 잘라서 읽습니다. 아무 말이나
           넣어보세요.
         </p>
         {tokenizerMeta ? (
