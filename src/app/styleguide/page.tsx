@@ -128,7 +128,7 @@ export default function StyleguidePage() {
             </p>
             <p className="text-body">
               본문 속 용어는 이렇게 표시된다:{" "}
-              <Term slug="dummy-term">더미 용어</Term> (미등재 용어는 평문으로
+              <Term slug="token">토큰</Term> (미등재 용어는 평문으로
               렌더된다).
             </p>
           </div>
@@ -157,7 +157,7 @@ export default function StyleguidePage() {
               FactValue — 시효성 수치 (탭하면 검증일·출처)
             </p>
             <p className="text-body">
-              파이프라인 검증용 더미 수치: <FactValue id="dummy.answer" />
+              컴포넌트 표본 수치: <FactValue id="dummy.answer" />
             </p>
           </div>
 
@@ -165,7 +165,11 @@ export default function StyleguidePage() {
             <p className="mb-2 text-caption text-ink-400">Prereq</p>
             <Prereq
               items={[
-                { id: "0-0", title: "더미 챕터", permalink: "/llm/dummy" },
+                {
+                  id: "1-1",
+                  title: "토큰: AI가 읽는 글자",
+                  permalink: "/llm/token",
+                },
               ]}
             />
           </div>
@@ -182,7 +186,11 @@ export default function StyleguidePage() {
             <p className="mb-2 text-caption text-ink-400">NextHook 카드</p>
             <NextHook
               nextHook="다음 챕터로 이어지는 연결 질문이 카드의 주인공이다."
-              next={{ id: "0-0", title: "더미 챕터", permalink: "/llm/dummy" }}
+              next={{
+                id: "1-2",
+                title: "다음 토큰 맞히기: LLM의 유일한 일",
+                permalink: "/llm/next-token",
+              }}
             />
           </div>
         </div>
@@ -308,12 +316,12 @@ export default function StyleguidePage() {
         <p className="text-sm-token text-ink-600">
           챕터 전 요소(제목~NextHook)의 조판 표본은{" "}
           <Link
-            href="/llm/dummy"
+            href="/llm/token"
             className="text-jjok-600 underline decoration-1 underline-offset-3"
           >
-            더미 챕터
+            1-1 토큰
           </Link>
-          가 담당한다. Phase 1 파일럿 승인 후 동결 표본을 이 섹션에 등재한다.
+          이 담당한다 — 파일럿 첫 공개분이라 동결 기준 표본을 겸한다.
         </p>
       </Section>
     </div>
