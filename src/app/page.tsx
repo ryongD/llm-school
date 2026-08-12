@@ -54,19 +54,28 @@ export default function HomePage() {
         }))}
       />
 
-      {/* ===== 히어로 — 논지 + 시연 (§6.2-2) ===== */}
+      {/* ===== 히어로 — 정체 + 시연 (§6.2-2, DESIGN v1.3) =====
+          첫 화면이 "여기가 뭐 하는 곳인가"에 답해야 한다. 구 문구는 실독
+          테스트 2회 연속 실패 — 근거는 DESIGN §6.2 개정 노트 참조. */}
       <section>
         {/* 사용자 어휘로 앵커링 — 'LLM'으로 시작하면 첫 단어에서 막힌다 */}
         <h1 className="font-display text-display leading-snug font-bold text-ink-900">
-          ChatGPT가 하는 일은 단 하나 —<br />
-          다음에 올 말을 맞히는 것.
+          ChatGPT는 속으로
+          <br />
+          무슨 일을 할까?
         </h1>
         <p className="mt-4 text-body text-ink-600">
-          이런 AI를 LLM(대형 언어 모델)이라고 부릅니다. 이 사이트는 그 속을
-          열어 보여줍니다.
+          ChatGPT 같은 AI를 LLM(대형 언어모델)이라고 부릅니다. 이 사이트는 그
+          안에서 무슨 일이 벌어지는지 글로 설명하는 대신,{" "}
+          <span className="text-ink-900">직접 만져보며 확인하는 곳</span>
+          입니다. 수학도 코딩도 필요 없습니다.
         </p>
 
-        {/* 설명 대신 시연이 첫인상 — 미니 토크나이저 ("안녕하세요" 프리셋) */}
+        {/* 설명 대신 시연이 첫인상 — 단, 무엇의 시연인지 한 줄 먼저 (§6.2-2) */}
+        <p className="mt-6 text-sm-token text-ink-600">
+          예를 들어 AI는 글을 이런 조각으로 잘라서 읽습니다 — 아무 말이나
+          넣어보세요.
+        </p>
         {tokenizerMeta ? (
           <WidgetSheet meta={tokenizerMeta}>
             <WidgetHost id={tokenizerMeta.id} />
