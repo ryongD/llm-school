@@ -46,14 +46,23 @@ PROBES: list[tuple[str, list[str]]] = [
     ("사람이 개를 물었다. 다친 것은", ["사람", "개"]),
     ("철수가 영희에게 책을 주었다. 책을 받은 사람은", ["영희", "철수"]),
     ("영희가 철수에게 책을 주었다. 책을 받은 사람은", ["영희", "철수"]),
-    # 순수 어순 시험: 낱말 구성은 완전히 같고 순서만 다르며, 정답이
-    # 검증 가능하다. 조사가 역할을 표시하는 위 예문들과 달리 여기서는
-    # 순서 말고는 단서가 없다(SPEC-2-4의 핵심 근거).
-    ("3 빼기 1은", ["2"]),
-    ("1 빼기 3은", ["2"]),
-    ("10 나누기 2는", ["5"]),
-    ("2 나누기 10은", ["5"]),
+    # 산수 문항은 순수 어순 시험으로 넣었다가 폐기했다 — 1.3B 모델이
+    # 산수 자체를 못 해("3 빼기 1은" → 0) 순서 민감도를 볼 수 없었다.
+    # 대신 아래 SCRAMBLE 방식을 쓴다.
 ]
+
+# 순수 어순 시험(SPEC-2-4의 핵심 근거).
+# 토큰 열을 그대로 두고 순서만 섞은 뒤, 모델이 그 열에 매기는 평균
+# 로그확률을 원문과 견준다. 토큰 구성이 완전히 같으므로 차이가 난다면
+# 그 차이는 오직 순서에서 온다. 위치 정보가 없는 모델이라면 둘이 같아야
+# 한다. 섞기는 시드 고정으로 재현 가능하게 한다.
+SCRAMBLE_SENTENCES = [
+    "나는 어제 친구와 영화를 봤다.",
+    "빨간 모자를 쓴 소녀가 숲을 걸었다.",
+    "서울에서 출발한 기차가 부산에 도착했다.",
+]
+SCRAMBLE_TRIALS = 5
+SCRAMBLE_SEED = 42
 
 
 def load(model_name: str):
@@ -84,6 +93,17 @@ def topk_entries(tokenizer, logprobs: torch.Tensor, k: int) -> list[dict]:
         }
         for v, i in zip(top.values, top.indices)
     ]
+
+
+def sequence_avg_logprob(model, device: str, ids: list[int]) -> float:
+    """토큰 열 전체의 평균 로그확률(첫 토큰 제외 — 조건이 없으므로)."""
+    with torch.no_grad():
+        logits = model(torch.tensor([ids], device=device)).logits[0]
+    logprobs = torch.log_softmax(logits.float(), dim=-1)
+    total = 0.0
+    for pos in range(len(ids) - 1):
+        total += float(logprobs[pos, ids[pos + 1]])
+    return total / (len(ids) - 1)
 
 
 def candidate_entry(tokenizer, logprobs: torch.Tensor, word: str) -> dict:
@@ -145,6 +165,38 @@ def main() -> None:
         print(f"[word_order] probe | {text!r} → {summary}"
               f" | top1 {entry['topk'][0]['token']!r}")
 
+    import random
+
+    scrambles = []
+    for text in SCRAMBLE_SENTENCES:
+        ids = tokenizer.encode(text)
+        natural = sequence_avg_logprob(model, device, ids)
+        rng = random.Random(SCRAMBLE_SEED)
+        trials = []
+        for _ in range(SCRAMBLE_TRIALS):
+            shuffled = ids[:]
+            rng.shuffle(shuffled)
+            trials.append(
+                {
+                    "tokens": [tokenizer.decode([i]) for i in shuffled],
+                    "text": tokenizer.decode(shuffled),
+                    "avgLogprob": round(sequence_avg_logprob(model, device, shuffled), 4),
+                }
+            )
+        best = max(t["avgLogprob"] for t in trials)
+        mean = sum(t["avgLogprob"] for t in trials) / len(trials)
+        entry = {
+            "text": text,
+            "tokens": [tokenizer.decode([i]) for i in ids],
+            "naturalAvgLogprob": round(natural, 4),
+            "scrambled": trials,
+            "scrambledBest": round(best, 4),
+            "scrambledMean": round(mean, 4),
+        }
+        scrambles.append(entry)
+        print(f"[word_order] scramble | {text!r}"
+              f" | 원문 {natural:.2f} vs 섞은 것 평균 {mean:.2f} (최고 {best:.2f})")
+
     if args.dry_run:
         print("[word_order] dry-run — 저장하지 않음")
         return
@@ -160,9 +212,15 @@ def main() -> None:
             "topK": TOP_K,
             "candidateRule": "후보 앞에 공백을 붙여 토큰화하고 첫 토큰만 본다",
             "note": "logprob은 자연로그. 위젯이 %로 되돌려 표시한다",
+            "scrambleRule": (
+                f"토큰 열을 그대로 두고 순서만 섞는다(시드 {SCRAMBLE_SEED}, "
+                f"{SCRAMBLE_TRIALS}회). 토큰 구성이 같으므로 평균 로그확률의 "
+                "차이는 순서에서만 온다"
+            ),
         },
         "pairs": pairs,
         "probes": probes,
+        "scrambles": scrambles,
     }
 
     out_dir = Path(args.out)
