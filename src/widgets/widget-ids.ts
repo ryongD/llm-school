@@ -6,6 +6,7 @@
 import { meta as attention } from "./attention/meta";
 import { meta as dummyCounter } from "./dummy-counter/meta";
 import { meta as embeddingMap } from "./embedding-map/meta";
+import { meta as layerFlow } from "./layer-flow/meta";
 import { meta as nextToken } from "./next-token/meta";
 import { meta as tokenizer } from "./tokenizer/meta";
 import type { WidgetMeta } from "./types";
@@ -16,6 +17,7 @@ export const widgetMetas: WidgetMeta[] = [
   nextToken,
   embeddingMap,
   attention,
+  layerFlow,
 ];
 
 export const widgetIds: string[] = widgetMetas.map((m) => m.id);

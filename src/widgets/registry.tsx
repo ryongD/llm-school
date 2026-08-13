@@ -14,6 +14,7 @@ import { WidgetSkeleton } from "@/components/widget/WidgetSkeleton";
 import { meta as attentionMeta } from "./attention/meta";
 import { meta as dummyCounterMeta } from "./dummy-counter/meta";
 import { meta as embeddingMapMeta } from "./embedding-map/meta";
+import { meta as layerFlowMeta } from "./layer-flow/meta";
 import { meta as nextTokenMeta } from "./next-token/meta";
 import { meta as tokenizerMeta } from "./tokenizer/meta";
 import type { WidgetMeta, WidgetProps } from "./types";
@@ -52,6 +53,12 @@ export const widgetRegistry: Record<string, RegistryEntry> = {
     meta: attentionMeta,
     Component: dynamic(() => import("./attention"), {
       loading: () => <WidgetSkeleton meta={attentionMeta} />,
+    }),
+  },
+  [layerFlowMeta.id]: {
+    meta: layerFlowMeta,
+    Component: dynamic(() => import("./layer-flow"), {
+      loading: () => <WidgetSkeleton meta={layerFlowMeta} />,
     }),
   },
 };
