@@ -132,6 +132,14 @@ clark2019:
   url: "https://arxiv.org/abs/1906.04341"
   grade: S1
 
+xiao2023:
+  type: paper
+  title: "Efficient Streaming Language Models with Attention Sinks"
+  authors: "Xiao, Tian, Chen, Han & Lewis"
+  year: 2023 # arXiv 2023-09, ICLR 2024 발표. 'attention sink' 명명 논문
+  url: "https://arxiv.org/abs/2309.17453"
+  grade: S1
+
 he2016:
   type: paper
   title: "Deep Residual Learning for Image Recognition (ResNet)"
