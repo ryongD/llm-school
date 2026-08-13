@@ -10,7 +10,15 @@ ahaMoment: "의미란 좌표다. 비슷한 뜻 = 가까운 위치 — 모델이 
 widgetId: w-embedding-map
 prerequisites: ["1-1", "1-2"]
 nextHook: "단어마다 좌표가 있다고 칩시다. 그런데 '배(먹는)'와 '배(타는)'는 같은 좌표일 수 없습니다. 문맥을 반영하려면? — 여기서 어텐션이 등장합니다."
-glossaryTerms: ["embedding", "vector", "cosine-similarity", "one-hot"]
+glossaryTerms:
+  [
+    "embedding",
+    "vector",
+    "cosine-similarity",
+    "one-hot",
+    "dimension",
+    "distributional-hypothesis",
+  ]
 references: ["mikolov2013", "jurafsky-slp3", "fasttext-vectors"]
 lastVerified: "2026-08-07"
 status: published
@@ -50,8 +58,8 @@ depthLevels: ["basic", "dev", "research"]
 ## 번호에서 좌표로
 
 방금 만진 지도의 정체를 말로 풀면 이렇습니다. 숫자를 순서대로 늘어놓은
-묶음을 <Term slug="vector">벡터</Term>라고 부르고, 그 숫자의 개수를
-차원이라고 부릅니다. 숫자가 두 개면 평면 지도의 한 점이고, 세 개면 공간의
+묶음을 <Term slug="vector">벡터</Term>라고 부르고, 그 숫자의 개수를{" "}
+<Term slug="dimension">차원</Term>이라고 부릅니다. 숫자가 두 개면 평면 지도의 한 점이고, 세 개면 공간의
 한 점입니다. 300개면 그림으로는 못 그리지만 계산으로는 아무 문제가 없는,
 300차원 공간의 한 점입니다.
 
@@ -70,8 +78,9 @@ depthLevels: ["basic", "dev", "research"]
 하나입니다.
 
 뜻을 어떻게 숫자에 담을까요? 열쇠는 앞 챕터에서 이미 본 게임입니다.
-"비슷한 문맥에 나오는 단어는 뜻도 비슷하다" — 언어학에서 분포 가설이라고
-부르는 오래된 관찰입니다(Jurafsky & Martin, 임베딩 장). word2vec은 한
+"비슷한 문맥에 나오는 단어는 뜻도 비슷하다." 언어학에서{" "}
+<Term slug="distributional-hypothesis">분포 가설</Term>이라고 부르는 오래된
+관찰입니다(Jurafsky & Martin, 임베딩 장). word2vec은 한
 단어를 보고 같은 문장의 주변 단어를 맞히는 게임을 시키면서, 게임을 더
 잘하게 되는 방향으로 각 단어의 숫자들을 조금씩 고쳐 나갑니다(Mikolov
 2013). 게임이 끝나면 비슷한 자리에 쓰이던 단어들은 비슷한 좌표에 모여

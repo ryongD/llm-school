@@ -1,0 +1,23 @@
+---
+slug: tokenizer
+term: "토크나이저 (tokenizer)"
+oneLiner: "글을 토큰으로 자르고 번호로 바꾸는 도구."
+relatedChapters: ["1-1"]
+references: ["openai-tokenizer-docs", "sennrich2016"]
+lastVerified: "2026-08-13"
+status: published
+---
+
+토크나이저는 글을 <Term slug="token">토큰</Term>으로 자르고 각 조각을
+번호로 바꾸는 도구다. 모델에 글을 넣기 전 반드시 거치는 첫 단계이며,
+모델이 내놓은 번호를 다시 글로 되돌리는 일도 맡는다.
+
+자르는 규칙은 미리 정해져 있다. 어떤 조각들을 쓸지 적어둔 목록이{" "}
+<Term slug="vocabulary">어휘</Term>이고, 그 목록을 만드는 대표적인 방법이{" "}
+<Term slug="bpe">BPE</Term>다(Sennrich 2016). 그래서 토크나이저마다 같은
+문장을 다르게 자른다.
+
+규칙 한 벌을 인코딩이라고 부른다. OpenAI 모델의 경우 GPT-4o 이후로는
+o200k_base, 그 전 세대는 cl100k_base를 쓴다(OpenAI 토크나이저 문서).
+이 사이트의 토크나이저 위젯에서 인코딩을 바꿔가며 같은 문장이 어떻게
+달리 잘리는지 직접 볼 수 있다.

@@ -1,0 +1,20 @@
+---
+slug: corpus
+term: "말뭉치 (corpus)"
+oneLiner: "모델을 학습시킬 때 읽히는 방대한 글 모음."
+relatedChapters: ["1-1"]
+references: ["jurafsky-slp3", "sennrich2016"]
+lastVerified: "2026-08-13"
+status: published
+---
+
+말뭉치는 모델을 학습시킬 때 읽히는 글 모음이다. 책·기사·웹 문서 같은
+실제 글을 대량으로 모은 것으로, 규모는 보통 수십억 단어를 넘는다.
+
+말뭉치는 두 곳에서 쓰인다. 하나는 <Term slug="vocabulary">어휘</Term>를
+만들 때다. <Term slug="bpe">BPE</Term>는 말뭉치를 훑어 자주 붙어 나오는
+조각 쌍을 세고 병합한다(Sennrich 2016). 다른 하나는 모델 자체를 학습시킬
+때다. 어떤 단어가 어떤 자리에 나오는지를 말뭉치에서 배운다.
+
+그래서 말뭉치에 무엇이 들었는지가 모델의 성질을 좌우한다. 특정 언어나
+분야의 글이 적게 들어가면 그 영역에서 약해진다.

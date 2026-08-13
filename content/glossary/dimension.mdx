@@ -1,0 +1,22 @@
+---
+slug: dimension
+term: "차원 (dimension)"
+oneLiner: "벡터에 들어 있는 숫자의 개수."
+relatedChapters: ["1-3"]
+references: ["jurafsky-slp3"]
+lastVerified: "2026-08-13"
+status: published
+---
+
+차원은 <Term slug="vector">벡터</Term>에 들어 있는 숫자의 개수다. 숫자가
+두 개면 2차원, 세 개면 3차원이고, 300개면 300차원이다. 3차원까지는 그림으로
+그릴 수 있지만 그 위로는 그릴 수 없다. 계산에는 아무 지장이 없다.
+
+<Term slug="embedding">임베딩</Term>의 차원은 보통 50에서 1,000 사이에서
+고른다(Jurafsky & Martin, 임베딩 장). 차원이 많을수록 담을 수 있는 정보가
+늘지만 계산과 저장 비용도 함께 는다. 이 사이트의 임베딩 지도 위젯이 쓰는
+fastText 한국어 벡터는 300차원이다.
+
+각 차원이 무엇을 뜻하는지는 정해져 있지 않다. "첫 번째 숫자는 감정,
+두 번째는 시제" 같은 해석은 없고, 300개 숫자가 함께 하나의 좌표를 이룰
+뿐이다.
