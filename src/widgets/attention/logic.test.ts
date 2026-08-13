@@ -149,6 +149,38 @@ describe("w-attention 헤드 비교 (2-2 확장 모드)", () => {
     }
   });
 
+  it("스팟 — L2 헤드1의 '바로 앞' 적중 75/83 (2-2 본문 '열에 아홉 번' 근거)", () => {
+    // 질의가 2번 토큰 이후인 경우만 — q=1은 '앞'과 '첫'이 같은 자리라 제외
+    let hit = 0;
+    let total = 0;
+    for (const s of trace.sentences) {
+      for (let q = 2; q < s.tokens.length; q++) {
+        total += 1;
+        if (weightsFor(s, 2, 1, q)[0][0] === q - 1) hit += 1;
+      }
+    }
+    expect(total).toBe(83);
+    expect(hit).toBe(75);
+  });
+
+  it("스팟 — 11층은 16개 헤드 중 15개가 첫 토큰 지목 과반 (2-2 research 인용)", () => {
+    // q=1은 '바로 앞'과 '첫 토큰'이 같은 자리라 제외한다 — classifyLink의
+    // prevFirst 중의 처리와 같은 기준(포함해 세면 16/16이 되어 과장된다)
+    let majority = 0;
+    for (let head = 0; head < trace._meta.headsTotal; head++) {
+      let first = 0;
+      let total = 0;
+      for (const s of trace.sentences) {
+        for (let q = 2; q < s.tokens.length; q++) {
+          total += 1;
+          if (weightsFor(s, 11, head, q)[0][0] === 0) first += 1;
+        }
+      }
+      if (first / total > 0.5) majority += 1;
+    }
+    expect(majority).toBe(15);
+  });
+
   it("스팟 — 다양성: L2 '타고'는 5종, L17에서는 1종으로 붕괴", () => {
     const s = trace.sentences[0];
     const early = headAnswers(s, 2, 4, trace._meta.headsTotal);
